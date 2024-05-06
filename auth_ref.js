@@ -1,4 +1,3 @@
-// Refactored code with improved readability and maintainability
 
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
@@ -13,24 +12,32 @@ const JWT_SECRET = process.env.SECRET_KEY;
  * @returns {Promise<void>}
  */
 const register = async (req, res) => {
-    try {
-        const { email, phone, name, address, password, role } = req.body;
-        const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
+  try {
+    const { email, phone, name, address, password, role } = req.body;
 
-        if (existingUser) {
-            return res.status(400).json({ error: 'User with this email or phone already exists' });
-        // }
+    // Check if a user with the same email or phone already exists
+    const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
 
-        // const hashedPassword = await bcrypt.hash(password, 10);
-        // const user = new User({ email, phone, name, address, password: hashedPassword, role });
-        // await user.save();
-
-        const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
-        res.status(201).json({ message: 'User registered successfully', token });
-    } catch (error) {
-        console.error('Error in register:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User with this email or phone already exists' });
     }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
+    const user = new User({ email, phone, name, address, password: hashedPassword, role });
+    await user.save();
+
+    // Generate a JWT token
+    const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
+
+    // Return the success response
+    res.status(201).json({ message: 'User registered successfully', token });
+  } catch (error) {
+    console.error('Error in register:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 /**
@@ -40,27 +47,32 @@ const register = async (req, res) => {
  * @returns {Promise<void>}
  */
 const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
+  try {
+    const { email, password } = req.body;
 
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
+    // Find the user by email
+    const user = await User.findOne({ email });
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        res.json({ user });
-    } catch (error) {
-        console.error('Error in login:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
+
+    // Compare the provided password with the hashed password
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Return the user object
+    res.json({ user });
+  } catch (error) {
+    console.error('Error in login:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 module.exports = {
-    register,
-    login
+  register,
+  login
 };
