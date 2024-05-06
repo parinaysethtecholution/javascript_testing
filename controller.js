@@ -1,27 +1,40 @@
-var Product = require('../models/Product');
 
-// Create a new product
-exports.createProduct =  function(req, res) {
+const Product = require('../models/Product');
+
+/**
+ * Create a new product.
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @returns {Promise<void>}
+ */
+exports.createProduct = async (req, res) => {
   try {
-    var name = req.body.name;
-    var price = req.body.price;
-    var imageLink = req.body.imageLink;
+    const { name, price, imageLink } = req.body;
 
-    let newProdct = new Product({ name: name, price: price, imageLink: imageLink });
-
+    const newProduct = new Product({ name, price, imageLink });
     await newProduct.save();
 
-    res.status(201).json({ message: 'Product created successfully', product: newProduct });
+    res.status(201).json({
+      message: 'Product created successfully',
+      product: newProduct
+    });
   } catch (error) {
     console.error('Error creating product:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-exports.getAllProducts = async function(req, res) {
+/**
+ * Retrieve all products.
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @returns {Promise<void>}
+ */
+exports.getAllProducts = async (req, res) => {
   try {
-    var products = await Product.find();
-
+    const products = await Product.find();
     res.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
