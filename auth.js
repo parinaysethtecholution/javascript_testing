@@ -1,3 +1,4 @@
+// Checking prompt changes May-6
 import {User} from '../models/User';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
