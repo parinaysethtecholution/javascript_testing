@@ -1,11 +1,18 @@
-// Checking-again prompt changes May-6
-import {User} from '../models/User';
+
+import { User } from '../models/User';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const JWT_SECRET = process.env.SECRET_KEY;
 
-export async function register(req, res){
+/**
+ * Registers a new user.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
+export async function register(req, res) {
   try {
     const { email, phone, name, address, password, role } = req.body;
     const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
@@ -13,33 +20,42 @@ export async function register(req, res){
     if (existingUser) {
       return res.status(400).json({ error: 'User with this email or phone already exists' });
     }
-    let hashedPassword =bcrypt.hash(password, 10);
-    var user = new User({ email, phone, name, address, password: hashedPassword, role });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ email, phone, name, address, password: hashedPassword, role });
     await user.save();
-    const t = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
-    res.status(201).json({ message: 'User registered successfully', t});
+
+    const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
+    res.status(201).json({ message: 'User registered successfully', token });
   } catch (error) {
     console.error('Error in register:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-};
-export const  login = async (req, res) => {
+}
+
+/**
+ * Logs in a user.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
+export const login = async (req, res) => {
   try {
-    const email=req.body.email;
-    const password=req.body.email;
-//this is comment about email and password
-    const user = awai User.findOne({ email });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    const pm = await bcrypt.compare(password, user.password);
 
-    if (!pm) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    res.json({ user );
+    res.json({ user });
   } catch (error) {
     console.error('Error in login:', error);
     res.status(500).json({ error: 'Internal Server Error' });
