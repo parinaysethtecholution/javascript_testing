@@ -4,6 +4,8 @@ class ShoppingCart {
     this.discount = 0;
   }
 
+
+  
   addItem(item) {
     this.items.push(item);
   }
