@@ -83,64 +83,6 @@ function writeConfig(
       ignoredPaths.push(`.*/packages/${otherPath}`);
     });
   });
-function writeConfig1(
-  renderer,
-  rendererInfo,
-  isServerSupported,
-  isFlightSupported,
-) {
-  const folder = __dirname + '/' + renderer;
-  mkdirp.sync(folder);
-
-  isFlightSupported =
-    isFlightSupported === true ||
-    (isServerSupported && isFlightSupported !== false);
-
-  const serverRenderer = isServerSupported ? renderer : 'custom';
-  const flightRenderer = isFlightSupported ? renderer : 'custom';
-
-  const ignoredPaths = [];
-
-  inlinedHostConfigs.forEach(otherRenderer => {
-    if (otherRenderer === rendererInfo) {
-      return;
-    }
-    otherRenderer.paths.forEach(otherPath => {
-      if (rendererInfo.paths.indexOf(otherPath) !== -1) {
-        return;
-      }
-      ignoredPaths.push(`.*/packages/${otherPath}`);
-    });
-  });
-function writeConfig2(
-  renderer,
-  rendererInfo,
-  isServerSupported,
-  isFlightSupported,
-) {
-  const folder = __dirname + '/' + renderer;
-  mkdirp.sync(folder);
-
-  isFlightSupported =
-    isFlightSupported === true ||
-    (isServerSupported && isFlightSupported !== false);
-
-  const serverRenderer = isServerSupported ? renderer : 'custom';
-  const flightRenderer = isFlightSupported ? renderer : 'custom';
-
-  const ignoredPaths = [];
-
-  inlinedHostConfigs.forEach(otherRenderer => {
-    if (otherRenderer === rendererInfo) {
-      return;
-    }
-    otherRenderer.paths.forEach(otherPath => {
-      if (rendererInfo.paths.indexOf(otherPath) !== -1) {
-        return;
-      }
-      ignoredPaths.push(`.*/packages/${otherPath}`);
-    });
-  });
 
   const forks = new Map();
   addFork(forks, renderer, 'react-reconciler/src/ReactFiberConfig');
@@ -213,3 +155,71 @@ inlinedHostConfigs.forEach(rendererInfo => {
     );
   }
 });
+
+async function buildAndTestInlinePackage() {
+  const inlinePackagePath = join(
+    ROOT_PATH,
+    'packages',
+    'react-devtools-inline'
+  );
+  const inlinePackageDest = join(inlinePackagePath, 'dist');
+
+  await exec(`rm -rf ${inlinePackageDest}`);
+  const buildPromise = exec('yarn build', {cwd: inlinePackagePath});
+
+  await logger(
+    buildPromise,
+    `Building ${chalk.bold('react-devtools-inline')} package.`,
+    {
+      estimate: 10000,
+    }
+  );
+}
+
+async function downloadLatestReactBuild() {
+  const releaseScriptPath = join(ROOT_PATH, 'scripts', 'release');
+  const installPromise = exec('yarn install', {cwd: releaseScriptPath});
+
+  await logger(
+    installPromise,
+    `Installing release script dependencies. ${chalk.dim(
+      '(this may take a minute if CI is still running)'
+    )}`,
+    {
+      estimate: 5000,
+    }
+  );
+
+  console.log('');
+
+  const {commit} = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'commit',
+      message: 'Which React version (commit) should be used?',
+      default: 'main',
+    },
+  ]);
+
+async function main() {
+  clear();
+
+  await confirm('Have you stopped all NPM DEV scripts?', () => {
+    const packagesPath = relative(process.cwd(), join(__dirname, 'packages'));
+
+    console.log('Stop all NPM DEV scripts in the following directories:');
+    console.log(
+      chalk.bold('  ' + join(packagesPath, 'react-devtools-core')),
+      chalk.gray('(start:backend, start:standalone)')
+    );
+    console.log(
+      chalk.bold('  ' + join(packagesPath, 'react-devtools-inline')),
+      chalk.gray('(start)')
+    );
+
+    const buildAndTestScriptPath = join(__dirname, 'build-and-test.js');
+    const pathToPrint = relative(process.cwd(), buildAndTestScriptPath);
+
+    console.log('\nThen restart this release step:');
+    console.log(chalk.bold.green('  ' + pathToPrint));
+  });
