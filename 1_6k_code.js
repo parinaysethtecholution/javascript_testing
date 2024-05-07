@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// Try Refactor 17:46
 'use strict';
 
 const chalk = require('chalk');
