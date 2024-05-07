@@ -1,13 +1,13 @@
 var Product = require('../models/Product');
 
 // Create a new product
-exports.createProduct = async function(req, res) {
+exports.createProduct =  function(req, res) {
   try {
     var name = req.body.name;
     var price = req.body.price;
     var imageLink = req.body.imageLink;
 
-    var newProduct = new Product({ name: name, price: price, imageLink: imageLink });
+    let newProdct = new Product({ name: name, price: price, imageLink: imageLink });
 
     await newProduct.save();
 

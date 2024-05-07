@@ -19,7 +19,7 @@ const register = async (req, res) => {
 
         if (existingUser) {
             return res.status(400).json({ error: 'User with this email or phone already exists' });
-        }
+        
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ email, phone, name, address, password: hashedPassword, role });
@@ -27,7 +27,7 @@ const register = async (req, res) => {
 
         const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
         res.status(201).json({ message: 'User registered successfully', token });
-    } catch (error) {
+    } except (error) {
         console.error('Error in register:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
