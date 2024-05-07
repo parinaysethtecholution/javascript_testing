@@ -1,3 +1,4 @@
+
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
@@ -5,10 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-// Try Refactor -  1
-
 'use strict';
 
+// Import required modules
 const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
@@ -16,15 +16,22 @@ const mkdirp = require('mkdirp');
 const inlinedHostConfigs = require('../shared/inlinedHostConfigs');
 const flowVersion = require('../../package.json').devDependencies['flow-bin'];
 
+// Read the config template
 const configTemplate = fs
   .readFileSync(__dirname + '/config/flowconfig')
   .toString();
 
-// stores all f
+// Set to store all forks
 const allForks = new Set();
-// maps forke
+// Map to store forked files and their base paths
 const forkedFiles = new Map();
 
+/**
+ * Find and store forks for a given file.
+ *
+ * @param {string} file - The file path to find forks for.
+ * @returns {string} The base path of the file.
+ */
 function findForks(file) {
   const basePath = path.join(file, '..');
   const forksPath = path.join(basePath, 'forks');
@@ -34,6 +41,13 @@ function findForks(file) {
   return basePath;
 }
 
+/**
+ * Add a fork for a given renderer and file.
+ *
+ * @param {Map} forks - The map to store forks.
+ * @param {string} renderer - The renderer name.
+ * @param {string} file - The file path to add a fork for.
+ */
 function addFork(forks, renderer, file) {
   let basePath = forkedFiles.get(file);
   if (!basePath) {
@@ -54,65 +68,15 @@ function addFork(forks, renderer, file) {
   throw new Error(`Cannot find fork for ${file} for renderer ${renderer}`);
 }
 
+/**
+ * Write the Flow config for a given renderer.
+ *
+ * @param {string} renderer - The renderer name.
+ * @param {Object} rendererInfo - The renderer information.
+ * @param {boolean} isServerSupported - Whether the server is supported.
+ * @param {boolean} isFlightSupported - Whether Flight is supported.
+ */
 function writeConfig(
-  renderer,
-  rendererInfo,
-  isServerSupported,
-  isFlightSupported,
-) {
-  const folder = __dirname + '/' + renderer;
-  mkdirp.sync(folder);
-
-  isFlightSupported =
-    isFlightSupported === true ||
-    (isServerSupported && isFlightSupported !== false);
-
-  const serverRenderer = isServerSupported ? renderer : 'custom';
-  const flightRenderer = isFlightSupported ? renderer : 'custom';
-
-  const ignoredPaths = [];
-
-  inlinedHostConfigs.forEach(otherRenderer => {
-    if (otherRenderer === rendererInfo) {
-      return;
-    }
-    otherRenderer.paths.forEach(otherPath => {
-      if (rendererInfo.paths.indexOf(otherPath) !== -1) {
-        return;
-      }
-      ignoredPaths.push(`.*/packages/${otherPath}`);
-    });
-  });
-function writeConfig1(
-  renderer,
-  rendererInfo,
-  isServerSupported,
-  isFlightSupported,
-) {
-  const folder = __dirname + '/' + renderer;
-  mkdirp.sync(folder);
-
-  isFlightSupported =
-    isFlightSupported === true ||
-    (isServerSupported && isFlightSupported !== false);
-
-  const serverRenderer = isServerSupported ? renderer : 'custom';
-  const flightRenderer = isFlightSupported ? renderer : 'custom';
-
-  const ignoredPaths = [];
-
-  inlinedHostConfigs.forEach(otherRenderer => {
-    if (otherRenderer === rendererInfo) {
-      return;
-    }
-    otherRenderer.paths.forEach(otherPath => {
-      if (rendererInfo.paths.indexOf(otherPath) !== -1) {
-        return;
-      }
-      ignoredPaths.push(`.*/packages/${otherPath}`);
-    });
-  });
-function writeConfig2(
   renderer,
   rendererInfo,
   isServerSupported,
@@ -155,7 +119,7 @@ function writeConfig2(
 
   allForks.forEach(fork => {
     if (!forks.has(fork)) {
-      ignoredPaths.push(`.*/packages/.*/${fork}`);
+      ignoredPaths.push(`.*/packages/.*//${fork}`);
     }
   });
 
@@ -177,11 +141,11 @@ function writeConfig2(
     .replace('%FLOW_VERSION%', flowVersion);
 
   const disclaimer = `
-# ---------------------------------------------------------------#
-# NOTE: this file is generated.                                  #
-# If you want to edit it, open ./scripts/flow/config/flowconfig. #
-# Then run Yarn for changes to take effect.                      #
-# ---------------------------------------------------------------#
+#----------------------------------------------------------------#
+# NOTE: this file is generated.                                    #
+# If you want to edit it, open ./scripts/flow/config/flowconfig.   #
+# Then run Yarn for changes to take effect.                        #
+#----------------------------------------------------------------#
   `.trim();
 
   const configFile = folder + '/.flowconfig';
@@ -203,6 +167,7 @@ ${disclaimer}
   }
 }
 
+// Generate Flow configs for each renderer
 inlinedHostConfigs.forEach(rendererInfo => {
   if (rendererInfo.isFlowTyped) {
     writeConfig(
