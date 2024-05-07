@@ -1,35 +1,21 @@
+
 'use strict';
 
-/* eslint-disable no-for-of-loops/no-for-of-loops */
-
+// Import required modules
 const getComments = require('./getComments');
 
+// Babel plugin function
 function transform(babel) {
-  const {types: t} = babel;
+  const { types: t } = babel;
 
-  // A very stupid subset of pseudo-JavaScript, used to run tests conditionally
-  // based on the environment.
-  //
-  // Input:
-  //   @gate a && (b || c)
-  //   test('some test', () => {/*...*/})
-  //
-  // Output:
-  //   @gate a && (b || c)
-  //   _test_gate(ctx => ctx.a && (ctx.b || ctx.c), 'some test', () => {/*...*/});
-  //
-  // expression     →  binary ( ( "||" | "&&" ) binary)* ;
-  // binary         →  unary ( ( "==" | "!=" | "===" | "!==" ) unary )* ;
-  // unary          →  "!" primary
-  //                |  primary ;
-  // primary        →  NAME | STRING | BOOLEAN
-  //                |  "(" expression ")" ;
+  // Helper function to tokenize code
   function tokenize(code) {
     const tokens = [];
     let i = 0;
     while (i < code.length) {
       let char = code[i];
-      // Double quoted strings
+
+      // Handle double quoted strings
       if (char === '"') {
         let string = '';
         i++;
@@ -43,11 +29,11 @@ function transform(babel) {
           }
           string += char;
         } while (true);
-        tokens.push({type: 'string', value: string});
+        tokens.push({ type: 'string', value: string });
         continue;
       }
 
-      // Single quoted strings
+      // Handle single quoted strings
       if (char === "'") {
         let string = '';
         i++;
@@ -61,11 +47,11 @@ function transform(babel) {
           }
           string += char;
         } while (true);
-        tokens.push({type: 'string', value: string});
+        tokens.push({ type: 'string', value: string });
         continue;
       }
 
-      // Whitespace
+      // Handle whitespace
       if (/\s/.test(char)) {
         if (char === '\n') {
           return tokens;
@@ -76,12 +62,12 @@ function transform(babel) {
 
       const next3 = code.slice(i, i + 3);
       if (next3 === '===') {
-        tokens.push({type: '=='});
+        tokens.push({ type: '==' });
         i += 3;
         continue;
       }
       if (next3 === '!==') {
-        tokens.push({type: '!='});
+        tokens.push({ type: '!=' });
         i += 3;
         continue;
       }
@@ -92,12 +78,11 @@ function transform(babel) {
         case '||':
         case '==':
         case '!=':
-          tokens.push({type: next2});
+          tokens.push({ type: next2 });
           i += 2;
           continue;
         case '//':
-          // This is the beginning of a line comment. The rest of the line
-          // is ignored.
+          // This is the beginning of a line comment. The rest of the line is ignored.
           return tokens;
       }
 
@@ -105,12 +90,12 @@ function transform(babel) {
         case '(':
         case ')':
         case '!':
-          tokens.push({type: char});
+          tokens.push({ type: char });
           i++;
           continue;
       }
 
-      // Names
+      // Handle names
       const nameRegex = /[a-zA-Z_$][0-9a-zA-Z_$]*/y;
       nameRegex.lastIndex = i;
       const match = nameRegex.exec(code);
@@ -118,15 +103,15 @@ function transform(babel) {
         const name = match[0];
         switch (name) {
           case 'true': {
-            tokens.push({type: 'boolean', value: true});
+            tokens.push({ type: 'boolean', value: true });
             break;
           }
           case 'false': {
-            tokens.push({type: 'boolean', value: false});
+            tokens.push({ type: 'boolean', value: false });
             break;
           }
           default: {
-            tokens.push({type: 'name', name});
+            tokens.push({ type: 'name', name });
           }
         }
         i += name.length;
@@ -138,6 +123,7 @@ function transform(babel) {
     return tokens;
   }
 
+  // Helper function to parse the tokenized code
   function parse(code, ctxIdentifier) {
     const tokens = tokenize(code);
 
@@ -238,6 +224,7 @@ function transform(babel) {
     return program;
   }
 
+  // Helper function to build the gate condition from comments
   function buildGateCondition(comments) {
     let conditions = null;
     for (const line of comments) {
@@ -265,6 +252,7 @@ function transform(babel) {
     }
   }
 
+  // Babel plugin visitor
   return {
     name: 'test-gate-pragma',
     visitor: {
