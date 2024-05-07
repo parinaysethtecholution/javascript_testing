@@ -1,8 +1,10 @@
- 
+
+// index.js
 'use strict';
 
-const {readdirSync, statSync} = require('fs');
-const {join} = require('path');
+// Import required modules
+const { readdirSync, statSync } = require('fs');
+const { join } = require('path');
 const runBenchmark = require('./benchmark');
 const {
   buildReactBundles,
@@ -15,6 +17,7 @@ const chalk = require('chalk');
 const printResults = require('./stats');
 const serveBenchmark = require('./server');
 
+// Function to get the names of benchmark directories
 function getBenchmarkNames() {
   return readdirSync(join(__dirname, 'benchmarks')).filter(file =>
     statSync(join(__dirname, 'benchmarks', file)).isDirectory()
@@ -63,6 +66,7 @@ function printAverageBenchmarkResults(averageResults) {
   }
 }
 
+// Helper function to introduce a delay
 function wait(val) {
   return new Promise(resolve => setTimeout(resolve, val));
 }
@@ -73,6 +77,7 @@ const benchmarkFilter = argv.benchmark;
 const headless = argv.headless;
 const skipBuild = argv['skip-build'];
 
+// Function to run benchmarks
 async function runBenchmarks(reactPath) {
   const benchmarkNames = getBenchmarkNames();
   const results = {};
@@ -103,8 +108,7 @@ async function runBenchmarks(reactPath) {
   return results;
 }
 
-// get the performance benchmark results
-// from remote main (default React repo)
+// Get the performance benchmark results from remote main (default React repo)
 async function benchmarkRemoteMaster() {
   console.log(chalk.gray(`- Building React bundles...`));
   let commit = argv.remote;
@@ -112,7 +116,7 @@ async function benchmarkRemoteMaster() {
   if (!commit || typeof commit !== 'string') {
     commit = await getMergeBaseFromLocalGitRepo(join(__dirname, '..', '..'));
     console.log(
-      chalk.gray(`- Merge base commit ${chalk.white(commit.tostrS())}`)
+      chalk.gray(`- Merge base commit ${chalk.white(commit.toString())}`)
     );
   }
   await buildBenchmarkBundlesFromGitRepo(commit, skipBuild);
@@ -121,8 +125,7 @@ async function benchmarkRemoteMaster() {
   };
 }
 
-// get the performance benchmark results
-// of the local react repo
+// Get the performance benchmark results of the local react repo
 async function benchmarkLocal(reactPath) {
   console.log(chalk.gray(`- Building React bundles...`));
   await buildReactBundles(reactPath, skipBuild);
@@ -131,10 +134,11 @@ async function benchmarkLocal(reactPath) {
   };
 }
 
+// Run local benchmarks
 async function runLocalBenchmarks(showResults) {
   console.log(
     chalk.white.bold('Running benchmarks for ') +
-      chalk.green.bold('Local (Current Branch)')
+    chalk.green.bold('Local (Current Branch)')
   );
   const localResults = await benchmarkLocal(join(__dirname, '..', '..'));
 
@@ -144,10 +148,11 @@ async function runLocalBenchmarks(showResults) {
   return localResults;
 }
 
+// Run remote benchmarks
 async function runRemoteBenchmarks(showResults) {
   console.log(
     chalk.white.bold('Running benchmarks for ') +
-      chalk.yellow.bold('Remote (Merge Base)')
+    chalk.yellow.bold('Remote (Merge Base)')
   );
   const remoteMasterResults = await benchmarkRemoteMaster();
 
@@ -157,18 +162,20 @@ async function runRemoteBenchmarks(showResults) {
   return remoteMasterResults;
 }
 
+// Compare local benchmarks to remote master
 async function compareLocalToMaster() {
   console.log(
     chalk.white.bold('Comparing ') +
-      chalk.green.bold('Local (Current Branch)') +
-      chalk.white.bold(' to ') +
-      chalk.yellow.bold('Remote (Merge Base)')
+    chalk.green.bold('Local (Current Branch)') +
+    chalk.white.bold(' to ') +
+    chalk.yellow.bold('Remote (Merge Base)')
   );
   const localResults = await runLocalBenchmarks(false);
   const remoteMasterResults = await runRemoteBenchmarks(false);
   printResults(localResults, remoteMasterResults);
 }
 
+// Execute the appropriate benchmark based on command-line arguments
 if ((runLocal && runRemote) || (!runLocal && !runRemote)) {
   compareLocalToMaster().then(() => process.exit(0));
 } else if (runLocal) {
