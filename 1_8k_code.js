@@ -1,3 +1,4 @@
+
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
@@ -164,8 +165,7 @@ declare module 'react-native/Libraries/ReactPrivate/ReactNativePrivateInterface'
   ): ?Object;
 }
 
-declare module 'react-native/Libraries/ReactPrivate/ReactNativePrivateInitializeCore' {
-}
+declare module 'react-native/Libraries/ReactPrivate/ReactNativePrivateInitializeCore' {}
 
 declare const RN$enableMicrotasksInReact: boolean;
 
