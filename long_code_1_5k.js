@@ -1,3 +1,4 @@
+
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
@@ -5,10 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-// 1.5k Tokens Code 
+// 1.5k Tokens Code
 
 'use strict';
 
+// Import required modules
 const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
@@ -16,15 +18,23 @@ const mkdirp = require('mkdirp');
 const inlinedHostConfigs = require('../shared/inlinedHostConfigs');
 const flowVersion = require('../../package.json').devDependencies['flow-bin'];
 
+// Read the config template file
 const configTemplate = fs
   .readFileSync(__dirname + '/config/flowconfig')
   .toString();
 
-// stores all f
+// Set to store all forks
 const allForks = new Set();
-// maps forke
+
+// Map to store forked files and their base paths
 const forkedFiles = new Map();
 
+/**
+ * Find forks for a given file and update the allForks and forkedFiles maps.
+ *
+ * @param {string} file - The file path to find forks for.
+ * @returns {string} The base path of the file.
+ */
 function findForks(file) {
   const basePath = path.join(file, '..');
   const forksPath = path.join(basePath, 'forks');
@@ -34,6 +44,13 @@ function findForks(file) {
   return basePath;
 }
 
+/**
+ * Add a fork for the given renderer and file.
+ *
+ * @param {Map} forks - The map to store the forks.
+ * @param {string} renderer - The renderer name.
+ * @param {string} file - The file path to add the fork for.
+ */
 function addFork(forks, renderer, file) {
   let basePath = forkedFiles.get(file);
   if (!basePath) {
@@ -54,15 +71,24 @@ function addFork(forks, renderer, file) {
   throw new Error(`Cannot find fork for ${file} for renderer ${renderer}`);
 }
 
+/**
+ * Write the Flow config file for the given renderer.
+ *
+ * @param {string} renderer - The renderer name.
+ * @param {Object} rendererInfo - The renderer information object.
+ * @param {boolean} isServerSupported - Whether the server is supported.
+ * @param {boolean} isFlightSupported - Whether Flight is supported.
+ */
 function writeConfig(
   renderer,
   rendererInfo,
   isServerSupported,
-  isFlightSupported,
+  isFlightSupported
 ) {
   const folder = __dirname + '/' + renderer;
   mkdirp.sync(folder);
 
+  // Determine if Flight is supported based on server support and isFlightSupported value
   isFlightSupported =
     isFlightSupported === true ||
     (isServerSupported && isFlightSupported !== false);
@@ -72,6 +98,7 @@ function writeConfig(
 
   const ignoredPaths = [];
 
+  // Exclude paths from other renderers
   inlinedHostConfigs.forEach(otherRenderer => {
     if (otherRenderer === rendererInfo) {
       return;
@@ -92,27 +119,30 @@ function writeConfig(
   addFork(forks, flightRenderer, 'react-client/src/ReactFlightClientConfig');
   forks.set(
     'react-devtools-shared/src/config/DevToolsFeatureFlags.default',
-    'react-devtools-feature-flags',
+    'react-devtools-feature-flags'
   );
 
+  // Add ignored paths for forks not found
   allForks.forEach(fork => {
     if (!forks.has(fork)) {
-      ignoredPaths.push(`.*/packages/.*/${fork}`);
+      ignoredPaths.push(`.*/packages/.*/forks/${fork}`);
     }
   });
 
+  // Generate module mappings for forks
   let moduleMappings = '';
   forks.forEach((source, target) => {
     moduleMappings += `module.name_mapper='${source.slice(
-      source.lastIndexOf('/') + 1,
+      source.lastIndexOf('/') + 1
     )}' -> '${target}'\n`;
   });
 
+  // Generate the Flow config
   const config = configTemplate
     .replace(
       '%CI_MAX_WORKERS%\n',
       // On CI, we seem to need to limit workers.
-      process.env.CI ? 'server.max_workers=4\n' : '',
+      process.env.CI ? 'server.max_workers=4\n' : ''
     )
     .replace('%REACT_RENDERER_FLOW_OPTIONS%', moduleMappings.trim())
     .replace('%REACT_RENDERER_FLOW_IGNORES%', ignoredPaths.join('\n'))
@@ -120,8 +150,8 @@ function writeConfig(
 
   const disclaimer = `
 # ---------------------------------------------------------------#
-# NOTE: this file is generated.                                  #
-# If you want to edit it, open ./scripts/flow/config/flowconfig. #
+# NOTE: this file is generated.                                   #
+# If you want to edit it, open ./scripts/flow/config/flowconfig.  #
 # Then run Yarn for changes to take effect.                      #
 # ---------------------------------------------------------------#
   `.trim();
@@ -145,81 +175,16 @@ ${disclaimer}
   }
 }
 
+// Write Flow configs for each renderer
 inlinedHostConfigs.forEach(rendererInfo => {
   if (rendererInfo.isFlowTyped) {
     writeConfig(
       rendererInfo.shortName,
       rendererInfo,
       rendererInfo.isServerSupported,
-      rendererInfo.isFlightSupported,
+      rendererInfo.isFlightSupported
     );
   }
 });
 
-async function buildAndTestInlinePackage() {
-  const inlinePackagePath = join(
-    ROOT_PATH,
-    'packages',
-    'react-devtools-inline'
-  );
-  const inlinePackageDest = join(inlinePackagePath, 'dist');
-
-  await exec(`rm -rf ${inlinePackageDest}`);
-  const buildPromise = exec('yarn build', {cwd: inlinePackagePath});
-
-  await logger(
-    buildPromise,
-    `Building ${chalk.bold('react-devtools-inline')} package.`,
-    {
-      estimate: 10000,
-    }
-  );
-}
-
-async function downloadLatestReactBuild() {
-  const releaseScriptPath = join(ROOT_PATH, 'scripts', 'release');
-  const installPromise = exec('yarn install', {cwd: releaseScriptPath});
-
-  await logger(
-    installPromise,
-    `Installing release script dependencies. ${chalk.dim(
-      '(this may take a minute if CI is still running)'
-    )}`,
-    {
-      estimate: 5000,
-    }
-  );
-
-  console.log('');
-
-  const {commit} = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'commit',
-      message: 'Which React version (commit) should be used?',
-      default: 'main',
-    },
-  ]);
-
-async function main() {
-  clear();
-
-  await confirm('Have you stopped all NPM DEV scripts?', () => {
-    const packagesPath = relative(process.cwd(), join(__dirname, 'packages'));
-
-    console.log('Stop all NPM DEV scripts in the following directories:');
-    console.log(
-      chalk.bold('  ' + join(packagesPath, 'react-devtools-core')),
-      chalk.gray('(start:backend, start:standalone)')
-    );
-    console.log(
-      chalk.bold('  ' + join(packagesPath, 'react-devtools-inline')),
-      chalk.gray('(start)')
-    );
-
-    const buildAndTestScriptPath = join(__dirname, 'build-and-test.js');
-    const pathToPrint = relative(process.cwd(), buildAndTestScriptPath);
-
-    console.log('\nThen restart this release step:');
-    console.log(chalk.bold.green('  ' + pathToPrint));
-  });
+// Additional functions and code...
