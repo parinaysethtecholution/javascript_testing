@@ -1,45 +1,65 @@
-// Checking-again-5 prompt changes of May6
-import {User} from '../models/User';
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
+// Importing required modules
+import { User } from '../models/User';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+
+// Secret key for JWT
 const JWT_SECRET = process.env.SECRET_KEY;
 
-export async function register(req, res){
+// Register a new user
+export async function register(req, res) {
   try {
     const { email, phone, name, address, password, role } = req.body;
+
+    // Check if user with the same email or phone already exists
     const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
 
     if (existingUser) {
       return res.status(400).json({ error: 'User with this email or phone already exists' });
     }
-    let hashedPassword =bcrypt.hash(password, 10);
-    var user = new User({ email, phone, name, address, password: hashedPassword, role });
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user instance
+    const user = new User({ email, phone, name, address, password: hashedPassword, role });
+
+    // Save the user to the database
     await user.save();
-    const t = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
-    res.status(201).json({ message: 'User registered successfully', t});
+
+    // Generate a JWT token
+    const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
+
+    // Send the response with the token
+    res.status(201).json({ message: 'User registered successfully', token });
   } catch (error) {
     console.error('Error in register:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-export const  login = async (req, res) => {
+
+// Login a user
+export const login = async (req, res) => {
   try {
-    const email=req.body.email;
-    const password=req.body.email;
-//this is comment about email and password
-    const user = awai User.findOne({ email });
+    const { email, password } = req.body;
+
+    // Find the user by email
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    const pm = await bcrypt.compare(password, user.password);
 
-    if (!pm) {
+    // Compare the provided password with the stored password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    res.json({ user );
+    // Send the user object as the response
+    res.json({ user });
   } catch (error) {
     console.error('Error in login:', error);
     res.status(500).json({ error: 'Internal Server Error' });
