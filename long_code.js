@@ -1,6 +1,7 @@
 // This is a sample JavaScript code that is long enough to exceed 2000 tokens when tokenized.
 // Just for checking if long scripts are getting successfully refactored or not.
 // PR didn't get raised. Trying again to make sure.
+// Trying again
 // Define a function that generates a random token
 function generateToken(length) {
     let result = '';
