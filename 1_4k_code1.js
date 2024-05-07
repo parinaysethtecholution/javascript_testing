@@ -1,14 +1,12 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
 
-// Try Refactor 2
+// Copyright (c) Meta Platforms, Inc. and affiliates.
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 'use strict';
 
+// Import required modules
 const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
@@ -16,15 +14,22 @@ const mkdirp = require('mkdirp');
 const inlinedHostConfigs = require('../shared/inlinedHostConfigs');
 const flowVersion = require('../../package.json').devDependencies['flow-bin'];
 
+// Read the config template from file
 const configTemplate = fs
   .readFileSync(__dirname + '/config/flowconfig')
   .toString();
 
-// stores all f
+// Set to store all forks
 const allForks = new Set();
-// maps forke
+// Map to store forked files and their base paths
 const forkedFiles = new Map();
 
+/**
+ * Find forks for a given file.
+ *
+ * @param {string} file - The file path.
+ * @returns {string} The base path of the forks.
+ */
 function findForks(file) {
   const basePath = path.join(file, '..');
   const forksPath = path.join(basePath, 'forks');
@@ -34,6 +39,13 @@ function findForks(file) {
   return basePath;
 }
 
+/**
+ * Add a fork for a given renderer and file.
+ *
+ * @param {Map} forks - The map to store forks.
+ * @param {string} renderer - The renderer name.
+ * @param {string} file - The file path.
+ */
 function addFork(forks, renderer, file) {
   let basePath = forkedFiles.get(file);
   if (!basePath) {
@@ -54,6 +66,14 @@ function addFork(forks, renderer, file) {
   throw new Error(`Cannot find fork for ${file} for renderer ${renderer}`);
 }
 
+/**
+ * Write the Flow config for a given renderer.
+ *
+ * @param {string} renderer - The renderer name.
+ * @param {Object} rendererInfo - The renderer information.
+ * @param {boolean} isServerSupported - Whether the renderer supports server-side rendering.
+ * @param {boolean} isFlightSupported - Whether the renderer supports Flight.
+ */
 function writeConfig(
   renderer,
   rendererInfo,
@@ -63,6 +83,7 @@ function writeConfig(
   const folder = __dirname + '/' + renderer;
   mkdirp.sync(folder);
 
+  // Determine if Flight is supported based on server support and explicit flag
   isFlightSupported =
     isFlightSupported === true ||
     (isServerSupported && isFlightSupported !== false);
@@ -72,64 +93,7 @@ function writeConfig(
 
   const ignoredPaths = [];
 
-  inlinedHostConfigs.forEach(otherRenderer => {
-    if (otherRenderer === rendererInfo) {
-      return;
-    }
-    otherRenderer.paths.forEach(otherPath => {
-      if (rendererInfo.paths.indexOf(otherPath) !== -1) {
-        return;
-      }
-      ignoredPaths.push(`.*/packages/${otherPath}`);
-    });
-  });
-function writeConfig1(
-  renderer,
-  rendererInfo,
-  isServerSupported,
-  isFlightSupported,
-) {
-  const folder = __dirname + '/' + renderer;
-  mkdirp.sync(folder);
-
-  isFlightSupported =
-    isFlightSupported === true ||
-    (isServerSupported && isFlightSupported !== false);
-
-  const serverRenderer = isServerSupported ? renderer : 'custom';
-  const flightRenderer = isFlightSupported ? renderer : 'custom';
-
-  const ignoredPaths = [];
-
-  inlinedHostConfigs.forEach(otherRenderer => {
-    if (otherRenderer === rendererInfo) {
-      return;
-    }
-    otherRenderer.paths.forEach(otherPath => {
-      if (rendererInfo.paths.indexOf(otherPath) !== -1) {
-        return;
-      }
-      ignoredPaths.push(`.*/packages/${otherPath}`);
-    });
-  });
-function writeConfig2(
-  renderer,
-  rendererInfo,
-  isServerSupported,
-  isFlightSupported,
-) {
-  const folder = __dirname + '/' + renderer;
-  mkdirp.sync(folder);
-
-  isFlightSupported =
-    isFlightSupported === true ||
-    (isServerSupported && isFlightSupported !== false);
-
-  const serverRenderer = isServerSupported ? renderer : 'custom';
-  const flightRenderer = isFlightSupported ? renderer : 'custom';
-
-  const ignoredPaths = [];
-
+  // Exclude paths from other renderers
   inlinedHostConfigs.forEach(otherRenderer => {
     if (otherRenderer === rendererInfo) {
       return;
@@ -153,9 +117,10 @@ function writeConfig2(
     'react-devtools-feature-flags',
   );
 
+  // Add ignored paths for forks not found
   allForks.forEach(fork => {
     if (!forks.has(fork)) {
-      ignoredPaths.push(`.*/packages/.*/${fork}`);
+      ignoredPaths.push(`.*/packages/.*/\${fork}`);
     }
   });
 
@@ -177,11 +142,11 @@ function writeConfig2(
     .replace('%FLOW_VERSION%', flowVersion);
 
   const disclaimer = `
-# ---------------------------------------------------------------#
-# NOTE: this file is generated.                                  #
-# If you want to edit it, open ./scripts/flow/config/flowconfig. #
-# Then run Yarn for changes to take effect.                      #
-# ---------------------------------------------------------------#
+#----------------------------------------------------------------#
+# NOTE: this file is generated.                                    #
+# If you want to edit it, open ./scripts/flow/config/flowconfig.   #
+# Then run Yarn for changes to take effect.                        #
+#----------------------------------------------------------------#
   `.trim();
 
   const configFile = folder + '/.flowconfig';
@@ -203,6 +168,7 @@ ${disclaimer}
   }
 }
 
+// Generate Flow configs for each renderer
 inlinedHostConfigs.forEach(rendererInfo => {
   if (rendererInfo.isFlowTyped) {
     writeConfig(
