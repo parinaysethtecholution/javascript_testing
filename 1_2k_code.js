@@ -1,3 +1,4 @@
+
 'use strict';
 
 const {readdirSync, statSync} = require('fs');
