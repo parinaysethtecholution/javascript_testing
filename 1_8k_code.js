@@ -1,34 +1,21 @@
-'use strict';
 
-/* eslint-disable no-for-of-loops/no-for-of-loops */
+'use strict';
 
 const getComments = require('./getComments');
 
 function transform(babel) {
-  const {types: t} = babel;
+  const { types: t } = babel;
 
-  // A very stupid subset of pseudo-JavaScript, used to run tests conditionally
-  // based on the environment.
-  //
-  // Input:
-  //   @gate a && (b || c)
-  //   test('some test', () => {/*...*/})
-  //
-  // Output:
-  //   @gate a && (b || c)
-  //   _test_gate(ctx => ctx.a && (ctx.b || ctx.c), 'some test', () => {/*...*/});
-  //
-  // expression     →  binary ( ( "||" | "&&" ) binary)* ;
-  // binary         →  unary ( ( "==" | "!=" | "===" | "!==" ) unary )* ;
-  // unary          →  "!" primary
-  //                |  primary ;
-  // primary        →  NAME | STRING | BOOLEAN
-  //                |  "(" expression ")" ;
+  // A simple parser for a subset of pseudo-JavaScript expressions
+  // used to conditionally run tests based on the environment.
+
   function tokenize(code) {
     const tokens = [];
     let i = 0;
+
     while (i < code.length) {
       let char = code[i];
+
       // Double quoted strings
       if (char === '"') {
         let string = '';
@@ -43,7 +30,7 @@ function transform(babel) {
           }
           string += char;
         } while (true);
-        tokens.push({type: 'string', value: string});
+        tokens.push({ type: 'string', value: string });
         continue;
       }
 
@@ -61,7 +48,7 @@ function transform(babel) {
           }
           string += char;
         } while (true);
-        tokens.push({type: 'string', value: string});
+        tokens.push({ type: 'string', value: string });
         continue;
       }
 
@@ -76,12 +63,12 @@ function transform(babel) {
 
       const next3 = code.slice(i, i + 3);
       if (next3 === '===') {
-        tokens.push({type: '=='});
+        tokens.push({ type: '==' });
         i += 3;
         continue;
       }
       if (next3 === '!==') {
-        tokens.push({type: '!='});
+        tokens.push({ type: '!=' });
         i += 3;
         continue;
       }
@@ -92,7 +79,7 @@ function transform(babel) {
         case '||':
         case '==':
         case '!=':
-          tokens.push({type: next2});
+          tokens.push({ type: next2 });
           i += 2;
           continue;
         case '//':
@@ -105,7 +92,7 @@ function transform(babel) {
         case '(':
         case ')':
         case '!':
-          tokens.push({type: char});
+          tokens.push({ type: char });
           i++;
           continue;
       }
@@ -118,15 +105,15 @@ function transform(babel) {
         const name = match[0];
         switch (name) {
           case 'true': {
-            tokens.push({type: 'boolean', value: true});
+            tokens.push({ type: 'boolean', value: true });
             break;
           }
           case 'false': {
-            tokens.push({type: 'boolean', value: false});
+            tokens.push({ type: 'boolean', value: false });
             break;
           }
           default: {
-            tokens.push({type: 'name', name});
+            tokens.push({ type: 'name', name });
           }
         }
         i += name.length;
