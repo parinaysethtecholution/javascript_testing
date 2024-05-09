@@ -1,44 +1,57 @@
+
+// Function to return an array of chat objects
 export function returnChats(obj) {
-    let arr = [];
-    Object.keys(obj).forEach(function(elem) {
-        arr.push({
-            "id": obj[elem].id,
-            "question": obj[elem].question,
-            "response": obj[elem].response,
-            "timeStamp": obj[elem].timeStamp
-        });
+  const chats = [];
+
+  // Iterate over the object keys
+  Object.keys(obj).forEach((key) => {
+    const chat = obj[key];
+    chats.push({
+      id: chat.id,
+      question: chat.question,
+      response: chat.response,
+      timeStamp: chat.timeStamp,
     });
-    return arr;
+  });
+
+  return chats;
 }
 
-
+// Function to return an array of task chat objects
 export function returnTaskChats(obj) {
-    let arr = [];
-    Object.keys(obj).forEach(function(elem) {
-        arr.push({
-            "id": obj[elem].id,
-            "question": obj[elem].question,
-            "response": obj[elem].response,
-            "taskCreated": obj[elem].taskCreated
-        });
+  const taskChats = [];
+
+  // Iterate over the object keys
+  Object.keys(obj).forEach((key) => {
+    const taskChat = obj[key];
+    taskChats.push({
+      id: taskChat.id,
+      question: taskChat.question,
+      response: taskChat.response,
+      taskCreated: taskChat.taskCreated,
     });
-    return arr;
+  });
+
+  return taskChats;
 }
 
+// Function to extract the city name from a string
 export function returnCity(str) {
-    const match = str.match(/"([^"]*)"/);
-    return match ? match[1] : null;
+  const match = str.match(/"([^"]*)"/) || [];
+  return match[1] || null;
 }
 
+// Function to return an array of weather detail objects
 export function returnWeatherDetails(object) {
-    let arr = [];
-    for (let key in object) {
-        if (object[key] && object[key] !== 0) {
-            arr.push({
-                key: key,
-                value: object[key]
-            });
-        }
+  const weatherDetails = [];
+
+  // Iterate over the object keys
+  for (const key in object) {
+    const value = object[key];
+    if (value !== 0) {
+      weatherDetails.push({ key, value });
     }
-    return arr;
+  }
+
+  return weatherDetails;
 }
