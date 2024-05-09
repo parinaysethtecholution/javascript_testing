@@ -1,3 +1,4 @@
+
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
@@ -5,10 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-// 1.5k Tokens Code 
+// 1.5k Tokens Code
 
 'use strict';
 
+// Import required modules
 const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
@@ -16,15 +18,23 @@ const mkdirp = require('mkdirp');
 const inlinedHostConfigs = require('../shared/inlinedHostConfigs');
 const flowVersion = require('../../package.json').devDependencies['flow-bin'];
 
+// Read the config template from file
 const configTemplate = fs
   .readFileSync(__dirname + '/config/flowconfig')
   .toString();
 
-// stores all f
+// Set to store all forks
 const allForks = new Set();
-// maps forke
+
+// Map to store forked files and their base paths
 const forkedFiles = new Map();
 
+/**
+ * Find forks for a given file.
+ *
+ * @param {string} file - The file path.
+ * @returns {string} The base path of the forks.
+ */
 function findForks(file) {
   const basePath = path.join(file, '..');
   const forksPath = path.join(basePath, 'forks');
@@ -34,6 +44,13 @@ function findForks(file) {
   return basePath;
 }
 
+/**
+ * Add a fork for a given renderer and file.
+ *
+ * @param {Map} forks - The map to store forks.
+ * @param {string} renderer - The renderer name.
+ * @param {string} file - The file path.
+ */
 function addFork(forks, renderer, file) {
   let basePath = forkedFiles.get(file);
   if (!basePath) {
@@ -54,6 +71,14 @@ function addFork(forks, renderer, file) {
   throw new Error(`Cannot find fork for ${file} for renderer ${renderer}`);
 }
 
+/**
+ * Write the Flow config for a given renderer.
+ *
+ * @param {string} renderer - The renderer name.
+ * @param {Object} rendererInfo - The renderer information.
+ * @param {boolean} isServerSupported - Whether the server is supported.
+ * @param {boolean} isFlightSupported - Whether Flight is supported.
+ */
 function writeConfig(
   renderer,
   rendererInfo,
@@ -63,6 +88,7 @@ function writeConfig(
   const folder = __dirname + '/' + renderer;
   mkdirp.sync(folder);
 
+  // Determine if Flight is supported based on server support and configuration
   isFlightSupported =
     isFlightSupported === true ||
     (isServerSupported && isFlightSupported !== false);
@@ -72,6 +98,7 @@ function writeConfig(
 
   const ignoredPaths = [];
 
+  // Exclude paths from other renderers
   inlinedHostConfigs.forEach(otherRenderer => {
     if (otherRenderer === rendererInfo) {
       return;
@@ -95,9 +122,10 @@ function writeConfig(
     'react-devtools-feature-flags',
   );
 
+  // Add ignored paths for forks not found
   allForks.forEach(fork => {
     if (!forks.has(fork)) {
-      ignoredPaths.push(`.*/packages/.*/${fork}`);
+      ignoredPaths.push(`.*/packages/.*//${fork}`);
     }
   });
 
@@ -119,11 +147,11 @@ function writeConfig(
     .replace('%FLOW_VERSION%', flowVersion);
 
   const disclaimer = `
-# ---------------------------------------------------------------#
+#---------------------------------------------------------------#
 # NOTE: this file is generated.                                  #
 # If you want to edit it, open ./scripts/flow/config/flowconfig. #
 # Then run Yarn for changes to take effect.                      #
-# ---------------------------------------------------------------#
+#---------------------------------------------------------------#
   `.trim();
 
   const configFile = folder + '/.flowconfig';
@@ -145,6 +173,7 @@ ${disclaimer}
   }
 }
 
+// Write Flow configs for each Flow-typed renderer
 inlinedHostConfigs.forEach(rendererInfo => {
   if (rendererInfo.isFlowTyped) {
     writeConfig(
@@ -156,16 +185,17 @@ inlinedHostConfigs.forEach(rendererInfo => {
   }
 });
 
+// Function to build and test the inline package
 async function buildAndTestInlinePackage() {
-  const inlinePackagePath = join(
+  const inlinePackagePath = path.join(
     ROOT_PATH,
     'packages',
     'react-devtools-inline'
   );
-  const inlinePackageDest = join(inlinePackagePath, 'dist');
+  const inlinePackageDest = path.join(inlinePackagePath, 'dist');
 
   await exec(`rm -rf ${inlinePackageDest}`);
-  const buildPromise = exec('yarn build', {cwd: inlinePackagePath});
+  const buildPromise = exec('yarn build', { cwd: inlinePackagePath });
 
   await logger(
     buildPromise,
@@ -176,9 +206,10 @@ async function buildAndTestInlinePackage() {
   );
 }
 
+// Function to download the latest React build
 async function downloadLatestReactBuild() {
-  const releaseScriptPath = join(ROOT_PATH, 'scripts', 'release');
-  const installPromise = exec('yarn install', {cwd: releaseScriptPath});
+  const releaseScriptPath = path.join(ROOT_PATH, 'scripts', 'release');
+  const installPromise = exec('yarn install', { cwd: releaseScriptPath });
 
   await logger(
     installPromise,
@@ -192,7 +223,7 @@ async function downloadLatestReactBuild() {
 
   console.log('');
 
-  const {commit} = await inquirer.prompt([
+  const { commit } = await inquirer.prompt([
     {
       type: 'input',
       name: 'commit',
@@ -201,25 +232,31 @@ async function downloadLatestReactBuild() {
     },
   ]);
 
+  // Additional code...
+}
+
 async function main() {
   clear();
 
   await confirm('Have you stopped all NPM DEV scripts?', () => {
-    const packagesPath = relative(process.cwd(), join(__dirname, 'packages'));
+    const packagesPath = path.relative(process.cwd(), path.join(__dirname, 'packages'));
 
     console.log('Stop all NPM DEV scripts in the following directories:');
     console.log(
-      chalk.bold('  ' + join(packagesPath, 'react-devtools-core')),
+      chalk.bold('  ' + path.join(packagesPath, 'react-devtools-core')),
       chalk.gray('(start:backend, start:standalone)')
     );
     console.log(
-      chalk.bold('  ' + join(packagesPath, 'react-devtools-inline')),
+      chalk.bold('  ' + path.join(packagesPath, 'react-devtools-inline')),
       chalk.gray('(start)')
     );
 
-    const buildAndTestScriptPath = join(__dirname, 'build-and-test.js');
-    const pathToPrint = relative(process.cwd(), buildAndTestScriptPath);
+    const buildAndTestScriptPath = path.join(__dirname, 'build-and-test.js');
+    const pathToPrint = path.relative(process.cwd(), buildAndTestScriptPath);
 
     console.log('\nThen restart this release step:');
     console.log(chalk.bold.green('  ' + pathToPrint));
   });
+
+  // Additional code...
+}
