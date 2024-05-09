@@ -1,17 +1,23 @@
-var Product = require('../models/Product');
 
+// Import the Product model
+import Product from '../models/Product';
 
-// Create a new product
-exports.createProduct = async function(req, res) {
+/**
+ * Create a new product
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+exports.createProduct = async (req, res) => {
   try {
-    var name = req.body.name;
-    var price = req.body.price;
-    var imageLink = req.body.imageLink;
+    const { name, price, imageLink } = req.body;
 
-    var newProduct = new Product({ name: name, price: price, imageLink: imageLink });
+    // Create a new product instance
+    const newProduct = new Product({ name, price, imageLink });
 
+    // Save the new product to the database
     await newProduct.save();
 
+    // Send a success response with the created product
     res.status(201).json({ message: 'Product created successfully', product: newProduct });
   } catch (error) {
     console.error('Error creating product:', error);
@@ -19,10 +25,17 @@ exports.createProduct = async function(req, res) {
   }
 };
 
-exports.getAllProducts = async function(req, res) {
+/**
+ * Get all products
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+exports.getAllProducts = async (req, res) => {
   try {
-    var products = await Product.find();
+    // Find all products in the database
+    const products = await Product.find();
 
+    // Send the products as the response
     res.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
