@@ -1,5 +1,6 @@
 var Product = require('../models/Product');
 
+
 // Create a new product
 exports.createProduct = async function(req, res) {
   try {
