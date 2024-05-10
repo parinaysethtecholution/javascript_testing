@@ -1,4 +1,4 @@
-// Checking-again-5 prompt changes of May6
+// Triggering for unit test check
 import {User} from '../models/User';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
