@@ -1,0 +1,12 @@
+
+> testenv@1.0.0 test
+> jest ShoppingCart_unittest.js
+
+No tests found, exiting with code 1
+Run with `--passWithNoTests` to exit with code 0
+In /home/techolution/Projects/sylvan-backend/Repos/javascript_testing/TestCases/TestEnv
+  5 files checked.
+  testMatch: **/__tests__/**/*.[jt]s?(x), **/?(*.)+(spec|test).[tj]s?(x) - 0 matches
+  testPathIgnorePatterns: /node_modules/ - 5 matches
+  testRegex:  - 0 matches
+Pattern: ShoppingCart_unittest.js - 0 matches
