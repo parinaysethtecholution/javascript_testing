@@ -1,0 +1,29 @@
+
+Test Results:
+ 
+> testenv@1.0.0 test
+> jest auth.test.js
+
+
+
+FAIL ./auth.test.js
+  ● Test suite failed to run
+
+    Cannot find module '../models/User' from 'auth.test.js'
+
+       7 | const bcrypt = require('bcrypt');
+       8 |
+    >  9 | jest.mock('../models/User');
+         |      ^
+      10 | jest.mock('jsonwebtoken');
+      11 | jest.mock('bcrypt');
+      12 |
+
+      at Resolver._throwModNotFoundError (node_modules/jest-resolve/build/resolver.js:427:11)
+      at Object.mock (auth.test.js:9:6)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        0.529 s
+Ran all test suites matching /auth.test.js/i.
