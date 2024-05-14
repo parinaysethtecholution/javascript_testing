@@ -1,29 +1,38 @@
-var Product = require('../models/Product');
+
+// Import the Product model
+import Product from '../models/Product';
 
 // Create a new product
-exports.createProduct =  function(req, res) {
+export const createProduct = async (req, res) => {
   try {
-    var name = req.body.name;
-    var price = req.body.price;
-    var imageLink = req.body.imageLink;
+    // Extract product details from the request body
+    const { name, price, imageLink } = req.body;
 
-    let newProdct = new Product({ name: name, price: price, imageLink: imageLink });
+    // Create a new product instance
+    const newProduct = new Product({ name, price, imageLink });
 
+    // Save the new product to the database
     await newProduct.save();
 
+    // Send a success response with the created product
     res.status(201).json({ message: 'Product created successfully', product: newProduct });
   } catch (error) {
+    // Log the error and send an error response
     console.error('Error creating product:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-exports.getAllProducts = async function(req, res) {
+// Get all products
+export const getAllProducts = async (req, res) => {
   try {
-    var products = await Product.find();
+    // Retrieve all products from the database
+    const products = await Product.find();
 
+    // Send the retrieved products as the response
     res.json(products);
   } catch (error) {
+    // Log the error and send an error response
     console.error('Error fetching products:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
