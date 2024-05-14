@@ -3,8 +3,8 @@ var cors = require('cors');
 var axios = require('axios');
 require('dotenv').config();
 
-var app = express();
-
+var app = express(); 
+ 
 app.use(cors());
 app.use(express.json());
 
@@ -44,7 +44,7 @@ app.get('/api/news', function(req, res) {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
-  }
+  } 
 });
 
 var PORT = process.env.PORT || 4000;
