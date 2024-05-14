@@ -1,0 +1,29 @@
+
+Test Results:
+ 
+> testenv@1.0.0 test
+> jest controller.test.js
+
+
+
+FAIL ./controller.test.js
+  ● Test suite failed to run
+
+    Cannot find module '../models/Product' from 'controller.test.js'
+
+       6 |
+       7 | // Mock the Product model
+    >  8 | jest.mock('../models/Product');
+         |      ^
+       9 |
+      10 | describe('createProduct', () => {
+      11 |   it('should create a new product successfully', async () => {
+
+      at Resolver._throwModNotFoundError (node_modules/jest-resolve/build/resolver.js:427:11)
+      at Object.mock (controller.test.js:8:6)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        0.514 s
+Ran all test suites matching /controller.test.js/i.
