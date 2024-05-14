@@ -28,6 +28,7 @@ app.post('/api', function(req, res) {
   }
 });
 
+
 app.get('/api/news', function(req, res) {
   try {
     var newsApiKey = process.env.NEWS_API_KEY;
