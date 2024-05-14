@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.SECRET_KEY;
 const register = async (req, res) => {
   try {
     const { email, phone, name, address, password, role } = req.body;
-    const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
+    const existingUser = await User.findOne({ $or: [{ email }, { phone }] }); 
 
     if (existingUser) {
       return res.status(400).json({ error: 'User with this email or phone already exists' });
