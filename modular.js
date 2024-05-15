@@ -8,6 +8,8 @@ export function returnChats(obj) {
             "timeStamp": obj[elem].timeStamp
         });
     });
+
+    
     return arr;
 }
 
