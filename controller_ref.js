@@ -1,13 +1,16 @@
-// Refactored code with improved readability and maintainability
 
 // Import the Product model
-const Product = require('../models/Product');
+import Product from '../models/Product';
 
-// Create a new product
+/**
+ * Controller function to create a new product
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 exports.createProduct = async (req, res) => {
   try {
     // Extract the necessary data from the request body
-    const { name, price, imageLink } = req.body; 
+    const { name, price, imageLink } = req.body;
 
     // Create a new product instance
     const newProduct = new Product({ name, price, imageLink });
@@ -24,17 +27,21 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// Fetch all products
+/**
+ * Controller function to fetch all products
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 exports.getAllProducts = async (req, res) => {
   try {
     // Retrieve all products from the database
-    const products = await Product.find(); 
+    const products = await Product.find();
 
     // Return the list of products
     res.json(products);
   } catch (error) {
     // Log the error and return a server error response
     console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Internal Server Error' }); 
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
