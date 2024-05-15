@@ -45,6 +45,7 @@ class ShoppingCart {
     return this.items.length;
   }
 
+  
   getItemByName(name) {
     return this.items.find(item => item.name === name);
   }
