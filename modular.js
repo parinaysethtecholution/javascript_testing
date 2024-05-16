@@ -1,3 +1,4 @@
+
 export function returnChats(obj) {
     let arr = [];
     Object.keys(obj).forEach(function(elem) {
@@ -42,32 +43,37 @@ export function returnWeatherDetails(object) {
     return arr;
 }
 
-
+// ParkingLot class to manage parking slots
 class ParkingLot {
-  constructor(size) {
-    this.slots = new Array(size).fill(null);
-    this.availableCount = size;
-  }
-  parkCar(car) {
-    if (this.availableCount === 0) return false;
-    const emptySlot = this.slots.findIndex(slot => slot === null);
-    this.slots[emptySlot] = car;
-    this.availableCount--;
-    return true;
-  }
-  removeCar(car) {
-    const slotIndex = this.slots.findIndex(slot => slot === car);
-    if (slotIndex === -1) return false;
-    this.slots[slotIndex] = null;
-    this.availableCount++;
-    return true;
-  }
-  getAvailableSlots() {
-    return this.availableCount;
-  }
-  isFull() {
-    return this.availableCount === 0;
-  }
+    // constructor to initialize slots and available count
+    constructor(size) {
+        this.slots = new Array(size).fill(null);
+        this.availableCount = size;
+    }
+    // method to park a car
+    parkCar(car) {
+        if (this.availableCount === 0) return false; // if no slots available, return false
+        const emptySlot = this.slots.findIndex(slot => slot === null); // find an empty slot
+        this.slots[emptySlot] = car; // park the car in the empty slot
+        this.availableCount--; // decrease the available count
+        return true; // return true indicating successful parking
+    }
+    // method to remove a car
+    removeCar(car) {
+        const slotIndex = this.slots.findIndex(slot => slot === car); // find the slot of the car
+        if (slotIndex === -1) return false; // if car not found, return false
+        this.slots[slotIndex] = null; // remove the car from the slot
+        this.availableCount++; // increase the available count
+        return true; // return true indicating successful removal
+    }
+    // method to get the number of available slots
+    getAvailableSlots() {
+        return this.availableCount;
+    }
+    // method to check if the parking lot is full
+    isFull() {
+        return this.availableCount === 0;
+    }
 }
 // Example usage
 const lot = new ParkingLot(10);
