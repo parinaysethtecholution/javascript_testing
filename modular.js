@@ -1,4 +1,3 @@
-refactored
 // Function to return an array of chat objects
 export function returnChats(obj) {
   return Object.keys(obj).map((key) => ({
