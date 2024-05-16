@@ -67,6 +67,8 @@ const cart = new ShoppingCart();
 const item1 = new Item('Laptop', 1000);
 const item2 = new Item('Phone', 800);
 const item3 = new Item('Headphones', 100);
+const item4 = new Item('Monitor', 200);
+const item4 = new Item('Mic', 50);
 
 cart.addItem(item1);
 cart.addItem(item2);
@@ -81,6 +83,7 @@ console.log('Total Price (after discount):', cart.getTotalPrice());
 
 console.log('Removing item at index 1...');
 cart.removeItem(1);
+cart.removeItem(2);
 cart.displayItems();
 console.log('Total Price:', cart.getTotalPrice());
 
