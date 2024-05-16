@@ -1,3 +1,4 @@
+
 // Refactored code with improved readability and maintainability
 
 // Import the Product model
@@ -39,8 +40,7 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
-
-
+// Refactored the ParkingLot class with improved readability and maintainability
 class ParkingLot {
   constructor(size) {
     this.slots = new Array(size).fill(null);
