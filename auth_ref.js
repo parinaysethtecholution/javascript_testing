@@ -1,3 +1,4 @@
+
 // Refactored code with improved readability and maintainability
 
 const User = require('../models/User');
@@ -17,6 +18,7 @@ const register = async (req, res) => {
         const { email, phone, name, address, password, role } = req.body;
         const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
 
+        // Check if a user with the given email or phone already exists
         if (existingUser) { 
             return res.status(400).json({ error: 'User with this email or phone already exists' });
         }
@@ -40,27 +42,8 @@ const register = async (req, res) => {
  * @returns {Promise<void>}
  */
 const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        res.json({ user });
-    } catch (error) {
-        console.error('Error in login:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
-module.exports = {
-    register,
-    login
-};
+    module.exports = {
+        register,
+        login
+    };
+}
