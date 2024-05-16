@@ -1,3 +1,4 @@
+
 class ShoppingCart {
   constructor() {
     this.items = [];
@@ -31,7 +32,7 @@ class ShoppingCart {
   displayItems() {
     console.log('Shopping Cart Items:');
     this.items.forEach((item, index) => {
-      console.log(`${index + 1}. ${item.name} - $${item.price}`);
+      console.log(`${index + 1}. ${item.name} - $$${item.price}`);
     });
   }
 
@@ -95,8 +96,6 @@ console.log('Clearing cart...');
 cart.clearCart();
 cart.displayItems();
 console.log('Total Price:', cart.getTotalPrice());
-
-
 
 class ParkingLot {
   constructor(size) {
