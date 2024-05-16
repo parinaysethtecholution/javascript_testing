@@ -1,48 +1,24 @@
-export function returnChats(obj) {
-    let arr = [];
-    Object.keys(obj).forEach(function(elem) {
-        arr.push({
-            "id": obj[elem].id,
-            "question": obj[elem].question,
-            "response": obj[elem].response,
-            "timeStamp": obj[elem].timeStamp
-        });
-    });
-    return arr;
-}
-
-export function returnTaskChats(obj) {
-    let arr = [];
-    Object.keys(obj).forEach(function(elem) {
-        arr.push({
-            "id": obj[elem].id,
-            "question": obj[elem].question,
-            "response": obj[elem].response,
-            "taskCreated": obj[elem].taskCreated
-        });
-    });
-    return arr;
-}
-
-export function returnCity(str) {
-    const match = str.match(/"([^"]*)"/);
-    return match ? match[1] : null;
-}
 
 export function returnWeatherDetails(object) {
-    let arr = [];
-    for (let key in object) {
-        if (object[key] && object[key] !== 0) {
-            arr.push({
-                key: key,
-                value: object[key]
-            });
-        }
+  // Refactored code for the returnWeatherDetails function
+  let arr = [];
+  for (let key in object) {
+    if (object[key] && object[key] !== 0) {
+      arr.push({
+        key: key,
+        value: object[key]
+      });
     }
-    return arr;
+  }
+  return arr;
 }
 
-
+// The ParkingLot class has been added to the code, which provides functionality to manage a parking lot.
+// The constructor initializes the parking slots and the available count.
+// The parkCar method parks a car in an available slot, if any.
+// The removeCar method removes a car from a slot, if present.
+// The getAvailableSlots method returns the number of available slots.
+// The isFull method checks if the parking lot is full.
 class ParkingLot {
   constructor(size) {
     this.slots = new Array(size).fill(null);
