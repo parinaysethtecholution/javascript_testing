@@ -40,7 +40,9 @@ const useFetchMovieTrailer = (movieId) => {
 
   // Use the useEffect hook to fetch the trailer if it's not already available
   useEffect(() => {
+    // Check if the trailer is already available in the Redux store
     if (isEmpty(trailer)) {
+      // If not, fetch the trailer from the API
       fetchTrailer();
     }
   }, []);
