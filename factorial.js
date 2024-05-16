@@ -31,12 +31,13 @@ class ParkingLot {
     }
 
     /**
-     * Parks a car in the first available slot.
+     * Attempts to park a car in the parking lot.
+     * If the parking lot is full, parking will fail.
      * @param {string} car - The identifier for the car.
-     * @returns {boolean} True if the car was successfully parked, false if the parking lot is full.
+     * @returns {boolean} True if the car was successfully parked, false otherwise.
      */
     parkCar(car) {
-        if (this.availableCount === 0) return false;
+        if (this.isFull()) return false;
         
         const emptySlot = this.slots.findIndex(slot => slot === null);
         this.slots[emptySlot] = car;
@@ -45,9 +46,10 @@ class ParkingLot {
     }
 
     /**
-     * Removes a car from the parking lot.
+     * Attempts to remove a car from the parking lot.
+     * If the car is not found, removal will fail.
      * @param {string} car - The identifier for the car to be removed.
-     * @returns {boolean} True if the car was successfully removed, false if the car was not found.
+     * @returns {boolean} True if the car was successfully removed, false otherwise.
      */
     removeCar(car) {
         const slotIndex = this.slots.findIndex(slot => slot === car);
@@ -85,6 +87,8 @@ console.log(lot.isFull()); // false
 
 /**
  * Calculates the factorial of a non-negative integer recursively.
+ * This is a more mathematical and elegant approach compared to the iterative method,
+ * but it may lead to stack overflow errors for large input values due to deep recursion.
  * @param {number} n - A non-negative integer whose factorial is to be calculated.
  * @returns {number|string} The factorial of the given number or an error message for negative inputs.
  */
