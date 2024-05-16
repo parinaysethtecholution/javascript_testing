@@ -1,3 +1,4 @@
+
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -12,6 +13,7 @@ const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ error: 'User with this email or phone already exists' });
     }
+    // Hash the password using bcrypt for security
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ email, phone, name, address, password: hashedPassword, role });
     await user.save();
@@ -32,6 +34,7 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
+    // Compare the provided password with the hashed password stored in the database
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
@@ -53,30 +56,47 @@ module.exports = {
 
 class ParkingLot {
   constructor(size) {
+    // Initialize an array of slots with null values
     this.slots = new Array(size).fill(null);
+    // Keep track of the available slots
     this.availableCount = size;
   }
+
   parkCar(car) {
+    // Check if there are available slots
     if (this.availableCount === 0) return false;
+    // Find the first available slot
     const emptySlot = this.slots.findIndex(slot => slot === null);
+    // Park the car in the available slot
     this.slots[emptySlot] = car;
+    // Decrement the available slot count
     this.availableCount--;
     return true;
   }
+
   removeCar(car) {
+    // Find the index of the car in the slots array
     const slotIndex = this.slots.findIndex(slot => slot === car);
+    // If the car is not found, return false
     if (slotIndex === -1) return false;
+    // Remove the car from the slot
     this.slots[slotIndex] = null;
+    // Increment the available slot count
     this.availableCount++;
     return true;
   }
+
   getAvailableSlots() {
+    // Return the number of available slots
     return this.availableCount;
   }
+
   isFull() {
+    // Check if there are no available slots
     return this.availableCount === 0;
   }
 }
+
 // Example usage
 const lot = new ParkingLot(10);
 lot.parkCar("CAR123");
