@@ -1,24 +1,22 @@
 refactored
 // Function to return an array of chat objects
 export function returnChats(obj) {
-  const chats = Object.keys(obj).map((key) => ({
+  return Object.keys(obj).map((key) => ({
     id: obj[key].id,
     question: obj[key].question,
     response: obj[key].response,
     timeStamp: obj[key].timeStamp,
   }));
-  return chats;
 }
 
 // Function to return an array of task chat objects
 export function returnTaskChats(obj) {
-  const taskChats = Object.keys(obj).map((key) => ({
+  return Object.keys(obj).map((key) => ({
     id: obj[key].id,
     question: obj[key].question,
     response: obj[key].response,
     taskCreated: obj[key].taskCreated,
   }));
-  return taskChats;
 }
 
 // Function to extract the city name from a string
