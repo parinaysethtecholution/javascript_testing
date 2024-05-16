@@ -12,12 +12,12 @@ const JWT_SECRET = process.env.SECRET_KEY;
  * @param {Object} res - The response object
  * @returns {Promise<void>}
  */
-const register = async (req, res) => {
+const register = async (req, res) => { 
     try {
         const { email, phone, name, address, password, role } = req.body;
         const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
 
-        if (existingUser) {
+        if (existingUser) { 
             return res.status(400).json({ error: 'User with this email or phone already exists' });
         }
 
@@ -27,11 +27,11 @@ const register = async (req, res) => {
 
         const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
         res.status(201).json({ message: 'User registered successfully', token });
-    } catch (error) {
+    } catch (error) { 
         console.error('Error in register:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-};
+}; 
 
 /**
  * Login a user
