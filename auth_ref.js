@@ -1,3 +1,4 @@
+
 // Refactored code with improved readability and maintainability
 
 const User = require('../models/User');
@@ -15,6 +16,7 @@ const JWT_SECRET = process.env.SECRET_KEY;
 const register = async (req, res) => {
     try {
         const { email, phone, name, address, password, role } = req.body;
+        // Refactored code to use a single query to check for existing user
         const existingUser = await User.findOne({ $or: [{ email }, { phone }] }); 
 
         if (existingUser) {
@@ -31,7 +33,7 @@ const register = async (req, res) => {
         console.error('Error in register:', error);
         res.status(500).json({ error: 'Internal Server Error' }); 
     }
-}; 
+};
 
 /**
  * Login a user
@@ -40,27 +42,8 @@ const register = async (req, res) => {
  * @returns {Promise<void>}
  */
 const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        res.json({ user });
-    } catch (error) {
-        console.error('Error in login:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
-module.exports = {
-    register,
-    login
+    module.exports = {
+        register,
+        login
+    };
 };
