@@ -1,4 +1,4 @@
-refactor_Harsh-Vasisht-patch-17_7613
+
 const Product = require('../models/Product');
 
 // Create a new product
