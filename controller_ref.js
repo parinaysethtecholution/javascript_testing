@@ -1,3 +1,4 @@
+
 // Refactored code with improved readability and maintainability
 
 // Import the Product model
@@ -23,32 +24,35 @@ exports.createProduct = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// ParkingLot class to manage parking slots
 class ParkingLot {
   constructor(size) {
-    this.slots = new Array(size).fill(null);
-    this.availableCount = size;
+    this.slots = new Array(size).fill(null); // Initialize slots with null
+    this.availableCount = size; // Track available slots
   }
   parkCar(car) {
-    if (this.availableCount === 0) return false;
-    const emptySlot = this.slots.findIndex(slot => slot === null);
-    this.slots[emptySlot] = car;
-    this.availableCount--;
-    return true;
+    if (this.availableCount === 0) return false; // If no slots available, return false
+    const emptySlot = this.slots.findIndex(slot => slot === null); // Find first empty slot
+    this.slots[emptySlot] = car; // Park the car in the empty slot
+    this.availableCount--; // Decrease available slots count
+    return true; // Return true if parking successful
   }
   removeCar(car) {
-    const slotIndex = this.slots.findIndex(slot => slot === car);
-    if (slotIndex === -1) return false;
-    this.slots[slotIndex] = null;
-    this.availableCount++;
-    return true;
+    const slotIndex = this.slots.findIndex(slot => slot === car); // Find the car in slots
+    if (slotIndex === -1) return false; // If car not found, return false
+    this.slots[slotIndex] = null; // Remove the car from the slot
+    this.availableCount++; // Increase available slots count
+    return true; // Return true if removal successful
   }
   getAvailableSlots() {
-    return this.availableCount;
+    return this.availableCount; // Return count of available slots
   }
   isFull() {
-    return this.availableCount === 0;
+    return this.availableCount === 0; // Return true if parking lot is full
   }
 }
+
 // Example usage
 const lot = new ParkingLot(10);
 lot.parkCar("CAR123");
@@ -56,6 +60,7 @@ lot.parkCar("TRUCK789");
 console.log(lot.getAvailableSlots()); // 8
 console.log(lot.removeCar("TRUCK789")); // true
 console.log(lot.isFull()); // false
+
 // Fetch all products
 exports.getAllProducts = async (req, res) => {
   try {
