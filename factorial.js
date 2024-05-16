@@ -1,31 +1,20 @@
-function factorialIterative(n) {
-    if (n < 0) {
-        return "Factorial is not defined for negative numbers";
-    }
-    let result = 1;
-    for (let i = 1; i <= n; i++) {
-        result *= i;
-    }
-    return result;
-}
-
-console.log(factorialIterative(5)); // Output: 120
-
 
 function factorialRecursive(n) {
-    if (n < 0) {
-        return "Factorial is not defined for negative numbers";
-    }
-    if (n === 0 || n === 1) {
-        return 1;
-    }
-    return n * factorialRecursive(n - 1);
+  // Check if n is a negative number
+  if (n < 0) {
+    return "Factorial is not defined for negative numbers";
+  }
+  
+  // Base case: if n is 0 or 1, return 1
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  
+  // Recursive case: calculate the factorial by multiplying n with the factorial of (n-1)
+  return n * factorialRecursive(n - 1);
 }
 
 console.log(factorialRecursive(5)); // Output: 120
-
-
-
 
 class ShoppingCart {
   constructor() {
@@ -40,14 +29,14 @@ class ShoppingCart {
   removeItem(index) {
     if (index >= 0 && index < this.items.length) {
       this.items.splice(index, 1);
-	@@ -43,6 +45,8 @@ class ShoppingCart {
     }
   }
 
   getTotalPrice() {
     let totalPrice = 0;
     for (const item of this.items) {
-	@@ -51,31 +55,37 @@ class ShoppingCart {
+      totalPrice += item.price;
+    }
     return totalPrice - this.discount;
   }
 
@@ -58,7 +47,7 @@ class ShoppingCart {
   displayItems() {
     console.log('Shopping Cart Items:');
     this.items.forEach((item, index) => {
-      console.log(`${index + 1}. ${item.name} - $${item.price}`);
+      console.log(`${index + 1}. ${item.name} - $$${item.price}`);
     });
   }
 
@@ -79,7 +68,9 @@ class ShoppingCart {
   containsItem(name) {
     return this.items.some(item => item.name === name);
   }
-	@@ -122,4 +132,3 @@ console.log('Clearing cart...');
+}
+
+console.log('Clearing cart...');
 cart.clearCart();
 cart.displayItems();
 console.log('Total Price:', cart.getTotalPrice());
