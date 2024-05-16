@@ -1,7 +1,7 @@
 /**
  * Calculates the factorial of a number iteratively.
  * @param {number} n - The number to calculate the factorial of.
- * @returns {number|string} The factorial of the number, or a message if the input is negative.
+ * @returns {number|string} The factorial of the number, or an error message for negative inputs.
  */
 function factorialIterative(n) {
     if (n < 0) {
@@ -18,12 +18,12 @@ function factorialIterative(n) {
 console.log(factorialIterative(5)); // Output: 120
 
 /**
- * Represents a parking lot with a fixed number of slots.
+ * Class representing a parking lot with a fixed number of slots.
  */
 class ParkingLot {
     /**
-     * Creates a parking lot with a specified size.
-     * @param {number} size - The total number of slots in the parking lot.
+     * Initializes a new instance of the ParkingLot class with the specified size.
+     * @param {number} size - The total number of parking slots in the lot.
      */
     constructor(size) {
         this.slots = new Array(size).fill(null);
@@ -31,9 +31,9 @@ class ParkingLot {
     }
 
     /**
-     * Parks a car in the first available slot.
-     * @param {string} car - The identifier for the car.
-     * @returns {boolean} True if the car was parked, false if the parking lot was full.
+     * Attempts to park a car in the first available slot.
+     * @param {string} car - The license plate or identifier of the car.
+     * @returns {boolean} Indicates whether the car was successfully parked.
      */
     parkCar(car) {
         if (this.availableCount === 0) return false;
@@ -45,9 +45,9 @@ class ParkingLot {
     }
 
     /**
-     * Removes a car from the parking lot.
-     * @param {string} car - The identifier for the car to remove.
-     * @returns {boolean} True if the car was removed, false if the car was not found.
+     * Attempts to remove a car from the parking lot.
+     * @param {string} car - The license plate or identifier of the car to remove.
+     * @returns {boolean} Indicates whether the car was successfully removed.
      */
     removeCar(car) {
         const slotIndex = this.slots.findIndex(slot => slot === car);
@@ -59,16 +59,16 @@ class ParkingLot {
     }
 
     /**
-     * Retrieves the number of available slots in the parking lot.
-     * @returns {number} The number of available slots.
+     * Gets the number of available parking slots.
+     * @returns {number} The count of available slots in the parking lot.
      */
     getAvailableSlots() {
         return this.availableCount;
     }
 
     /**
-     * Checks if the parking lot is full.
-     * @returns {boolean} True if the parking lot is full, false otherwise.
+     * Determines if the parking lot is currently full.
+     * @returns {boolean} Indicates whether the parking lot is full.
      */
     isFull() {
         return this.availableCount === 0;
@@ -86,7 +86,7 @@ console.log(lot.isFull()); // false
 /**
  * Calculates the factorial of a number recursively.
  * @param {number} n - The number to calculate the factorial of.
- * @returns {number|string} The factorial of the number, or a message if the input is negative.
+ * @returns {number|string} The factorial of the number, or an error message for negative inputs.
  */
 function factorialRecursive(n) {
     if (n < 0) {
