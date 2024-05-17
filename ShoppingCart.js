@@ -4,7 +4,7 @@ class ShoppingCart {
     this.discount = 0;
   }
 
-  addItem(item) {
+  addItem(item) { 
     this.items.push(item);
   }
 
