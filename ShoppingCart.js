@@ -1,15 +1,18 @@
+
 class ShoppingCart {
   constructor() {
     this.items = [];
     this.discount = 0;
   }
- 
+
   addItem(item) {
+    // Add the item to the shopping cart
     this.items.push(item);
   }
 
   removeItem(index) {
     if (index >= 0 && index < this.items.length) {
+      // Remove the item from the shopping cart
       this.items.splice(index, 1);
     } else {
       console.error('Invalid index');
@@ -19,37 +22,44 @@ class ShoppingCart {
   getTotalPrice() {
     let totalPrice = 0;
     for (const item of this.items) {
+      // Calculate the total price of all items in the cart
       totalPrice += item.price;
     }
     return totalPrice - this.discount;
   }
 
   applyDiscount(amount) {
+    // Apply the discount to the shopping cart
     this.discount = amount;
   }
 
   displayItems() {
     console.log('Shopping Cart Items:');
     this.items.forEach((item, index) => {
-      console.log(`${index + 1}. ${item.name} - $${item.price}`);
+      // Display the items in the shopping cart
+      console.log(`${index + 1}. ${item.name} - $$${item.price}`);
     });
   }
 
   clearCart() {
+    // Clear the shopping cart
     this.items = [];
     this.discount = 0;
     console.log('Cart cleared.');
   }
 
   getItemCount() {
+    // Get the number of items in the shopping cart
     return this.items.length;
   }
 
   getItemByName(name) {
+    // Get the item with the specified name
     return this.items.find(item => item.name === name);
   }
 
   containsItem(name) {
+    // Check if the shopping cart contains an item with the specified name
     return this.items.some(item => item.name === name);
   }
 }
@@ -95,5 +105,3 @@ console.log('Clearing cart...');
 cart.clearCart();
 cart.displayItems();
 console.log('Total Price:', cart.getTotalPrice());
-
-
