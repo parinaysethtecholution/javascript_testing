@@ -1,20 +1,22 @@
-
 /**
- * Calculates the factorial of a given non-negative integer using an iterative approach.
- *
- * @param {number} n - The non-negative integer for which the factorial needs to be calculated.
- * @returns {number|string} - The factorial of the given number, or an error message if the input is negative.
+ * Computes the factorial of a non-negative integer using iteration.
+ * Factorial is the product of all positive integers less than or equal to n.
+ * For example, the factorial of 5 (5!) is 5 x 4 x 3 x 2 x 1 = 120.
+ * 
+ * @param {number} n - A non-negative integer whose factorial is to be computed.
+ * @returns {number|string} The factorial of `n` if `n` is non-negative, otherwise an error message.
+ * @throws {Error} Throws an error if the input is not a non-negative integer.
  */
 function factorialIterative(n) {
-  // Check if the input is negative
+  if (typeof n !== 'number' || n % 1 !== 0) {
+    throw new Error('Input must be a non-negative integer.');
+  }
+
   if (n < 0) {
     return "Factorial is not defined for negative numbers";
   }
 
-  // Initialize the result with 1
   let result = 1;
-
-  // Iterate from 1 to n and multiply each number to the result
   for (let i = 1; i <= n; i++) {
     result *= i;
   }
@@ -23,23 +25,27 @@ function factorialIterative(n) {
 }
 
 /**
- * Calculates the factorial of a given non-negative integer using a recursive approach.
- *
- * @param {number} n - The non-negative integer for which the factorial needs to be calculated.
- * @returns {number|string} - The factorial of the given number, or an error message if the input is negative.
+ * Computes the factorial of a non-negative integer using recursion.
+ * This function calls itself with decremented values of `n` until it reaches the base case.
+ * The recursion unwinds with the multiplication of returned values, giving the factorial.
+ * 
+ * @param {number} n - A non-negative integer whose factorial is to be computed.
+ * @returns {number|string} The factorial of `n` if `n` is non-negative, otherwise an error message.
+ * @throws {Error} Throws an error if the input is not a non-negative integer.
  */
 function factorialRecursive(n) {
-  // Check if the input is negative
+  if (typeof n !== 'number' || n % 1 !== 0) {
+    throw new Error('Input must be a non-negative integer.');
+  }
+
   if (n < 0) {
     return "Factorial is not defined for negative numbers";
   }
 
-  // Base case: If n is 0 or 1, return 1
   if (n === 0 || n === 1) {
     return 1;
   }
 
-  // Recursive case: Calculate the factorial by multiplying n with the factorial of (n - 1)
   return n * factorialRecursive(n - 1);
 }
 
