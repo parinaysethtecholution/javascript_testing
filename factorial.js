@@ -23,3 +23,4 @@ function factorialRecursive(n) {
 }
 
 console.log(factorialRecursive(5)); // Output: 120
+ 
