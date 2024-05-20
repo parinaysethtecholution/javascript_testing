@@ -1,0 +1,134 @@
+
+Test Results:
+ 
+> testenv@1.0.0 test
+> jest ShoppingCart.test.js
+
+  console.log
+    Shopping Cart Items:
+
+      at ShoppingCart.log [as displayItems] (ShoppingCart.js:32:13)
+
+  console.log
+    1. Laptop - $1000
+
+      at log (ShoppingCart.js:34:15)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    2. Phone - $800
+
+      at log (ShoppingCart.js:34:15)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    3. Headphones - $100
+
+      at log (ShoppingCart.js:34:15)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    Total Price: 1900
+
+      at Object.log (ShoppingCart.js:76:9)
+
+  console.log
+    Applying discount of $200...
+
+      at Object.log (ShoppingCart.js:78:9)
+
+  console.log
+    Total Price (after discount): 1700
+
+      at Object.log (ShoppingCart.js:80:9)
+
+  console.log
+    Removing item at index 1...
+
+      at Object.log (ShoppingCart.js:82:9)
+
+  console.log
+    Shopping Cart Items:
+
+      at ShoppingCart.log [as displayItems] (ShoppingCart.js:32:13)
+
+  console.log
+    1. Laptop - $1000
+
+      at log (ShoppingCart.js:34:15)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    2. Headphones - $100
+
+      at log (ShoppingCart.js:34:15)
+          at Array.forEach (<anonymous>)
+
+  console.log
+    Total Price: 900
+
+      at Object.log (ShoppingCart.js:85:9)
+
+  console.log
+    Total number of items in the cart: 2
+
+      at Object.log (ShoppingCart.js:87:9)
+
+  console.log
+    Getting item by name:
+
+      at Object.log (ShoppingCart.js:89:9)
+
+  console.log
+    Item { name: 'Laptop', price: 1000 }
+
+      at Object.log (ShoppingCart.js:90:9)
+
+  console.log
+    Is "Phone" in the cart? false
+
+      at Object.log (ShoppingCart.js:92:9)
+
+  console.log
+    Clearing cart...
+
+      at Object.log (ShoppingCart.js:94:9)
+
+  console.log
+    Cart cleared.
+
+      at ShoppingCart.log [as clearCart] (ShoppingCart.js:41:13)
+
+  console.log
+    Shopping Cart Items:
+
+      at ShoppingCart.log [as displayItems] (ShoppingCart.js:32:13)
+
+  console.log
+    Total Price: 0
+
+      at Object.log (ShoppingCart.js:97:9)
+
+
+
+FAIL ./ShoppingCart.test.js
+  ● Test suite failed to run
+
+    Cannot find module './Item' from 'ShoppingCart.test.js'
+
+      3 |
+      4 | const ShoppingCart = require('./ShoppingCart');
+    > 5 | const Item = require('./Item');
+        |              ^
+      6 |
+      7 | describe('ShoppingCart', () => {
+      8 |   let cart;
+
+      at Resolver._throwModNotFoundError (node_modules/jest-resolve/build/resolver.js:427:11)
+      at Object.require (ShoppingCart.test.js:5:14)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        1.61 s
+Ran all test suites matching /ShoppingCart.test.js/i.
