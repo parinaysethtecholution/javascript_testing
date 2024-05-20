@@ -1,0 +1,29 @@
+
+Test Results:
+ 
+> testenv@1.0.0 test
+> jest factorial.test.js
+
+  console.log
+    120
+
+      at Object.log (factorial.js:12:9)
+
+  console.log
+    120
+
+      at Object.log (factorial.js:25:9)
+
+  console.log
+    true
+
+      at Object.log (factorial.js:46:9)
+
+  console.log
+    false
+
+      at Object.log (factorial.js:47:9)
+
+
+
+None
