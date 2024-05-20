@@ -1,10 +1,12 @@
+
 class ShoppingCart {
   constructor() {
     this.items = [];
     this.discount = 0;
   }
 
-  addItem(item) { 
+  addItem(item) { // Refactored to add a comment
+    // Add the item to the shopping cart
     this.items.push(item);
   }
 
@@ -31,7 +33,7 @@ class ShoppingCart {
   displayItems() {
     console.log('Shopping Cart Items:');
     this.items.forEach((item, index) => {
-      console.log(`${index + 1}. ${item.name} - $${item.price}`);
+      console.log(`${index + 1}. ${item.name} - $$${item.price}`);
     });
   }
 
@@ -95,5 +97,3 @@ console.log('Clearing cart...');
 cart.clearCart();
 cart.displayItems();
 console.log('Total Price:', cart.getTotalPrice());
-
-
