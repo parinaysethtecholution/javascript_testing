@@ -1,3 +1,4 @@
+
 class ShoppingCart {
   constructor() {
     this.items = [];
@@ -5,6 +6,7 @@ class ShoppingCart {
   }
 
   addItem(item) { 
+    // Add the item to the shopping cart
     this.items.push(item);
   }
 
@@ -25,13 +27,14 @@ class ShoppingCart {
   }
 
   applyDiscount(amount) {
+    // Apply the discount to the total price
     this.discount = amount;
   }
 
   displayItems() {
     console.log('Shopping Cart Items:');
     this.items.forEach((item, index) => {
-      console.log(`${index + 1}. ${item.name} - $${item.price}`);
+      console.log(`${index + 1}. ${item.name} - $$${item.price}`);
     });
   }
 
@@ -95,5 +98,3 @@ console.log('Clearing cart...');
 cart.clearCart();
 cart.displayItems();
 console.log('Total Price:', cart.getTotalPrice());
-
-
