@@ -1,70 +1,101 @@
-
 class ShoppingCart {
+  /**
+   * Constructs a new ShoppingCart instance.
+   */
   constructor() {
     this.items = [];
     this.discount = 0;
   }
 
+  /**
+   * Adds an item to the shopping cart.
+   * @param {Item} item - The item to add to the cart.
+   */
   addItem(item) { 
-    // Add the item to the shopping cart
     this.items.push(item);
   }
 
+  /**
+   * Removes an item from the shopping cart by index.
+   * @param {number} index - The index of the item to remove.
+   */
   removeItem(index) {
     if (index >= 0 && index < this.items.length) {
-      // Remove the item from the shopping cart
       this.items.splice(index, 1);
     } else {
       console.error('Invalid index');
     }
   }
 
+  /**
+   * Calculates the total price of all items in the cart after discount.
+   * @returns {number} The total price.
+   */
   getTotalPrice() {
-    let totalPrice = 0;
-    for (const item of this.items) {
-      // Calculate the total price of all items in the cart
-      totalPrice += item.price;
-    }
+    let totalPrice = this.items.reduce((total, item) => total + item.price, 0);
     return totalPrice - this.discount;
   }
 
+  /**
+   * Applies a discount to the shopping cart.
+   * @param {number} amount - The discount amount to apply.
+   */
   applyDiscount(amount) {
-    // Apply the discount to the shopping cart
     this.discount = amount;
   }
 
+  /**
+   * Displays all items in the shopping cart.
+   */
   displayItems() {
     console.log('Shopping Cart Items:');
     this.items.forEach((item, index) => {
-      // Display the items in the shopping cart
-      console.log(`${index + 1}. ${item.name} - $$${item.price}`);
+      console.log(`${index + 1}. ${item.name} - $${item.price}`);
     });
   }
 
+  /**
+   * Clears all items from the shopping cart and resets the discount.
+   */
   clearCart() {
-    // Clear the shopping cart
     this.items = [];
     this.discount = 0;
     console.log('Cart cleared.');
   }
 
+  /**
+   * Gets the count of items in the shopping cart.
+   * @returns {number} The number of items.
+   */
   getItemCount() {
-    // Get the number of items in the shopping cart
     return this.items.length;
   }
 
+  /**
+   * Retrieves an item from the shopping cart by name.
+   * @param {string} name - The name of the item to find.
+   * @returns {Item|undefined} The found item or undefined if not found.
+   */
   getItemByName(name) {
-    // Get the item with the specified name
     return this.items.find(item => item.name === name);
   }
 
+  /**
+   * Checks if the shopping cart contains an item with the specified name.
+   * @param {string} name - The name of the item to check.
+   * @returns {boolean} True if the item is in the cart, false otherwise.
+   */
   containsItem(name) {
-    // Check if the shopping cart contains an item with the specified name
     return this.items.some(item => item.name === name);
   }
 }
 
 class Item {
+  /**
+   * Constructs a new Item instance.
+   * @param {string} name - The name of the item.
+   * @param {number} price - The price of the item.
+   */
   constructor(name, price) {
     this.name = name;
     this.price = price;
