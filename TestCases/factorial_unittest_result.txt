@@ -1,0 +1,33 @@
+
+Test Results:
+ 
+> testenv@1.0.0 test
+> jest factorial.test.js
+
+  console.log
+    120
+
+      at Object.log (factorial.test.js:12:9)
+
+  console.log
+    120
+
+      at Object.log (factorial.test.js:26:9)
+
+
+
+PASS ./factorial.test.js
+  factorialIterative function
+    ✓ should return the factorial of a positive number (2 ms)
+    ✓ should return an error message for negative numbers (1 ms)
+    ✓ should return 1 for factorial of 0
+  factorialRecursive function
+    ✓ should return the factorial of a positive number
+    ✓ should return an error message for negative numbers (1 ms)
+    ✓ should return 1 for factorial of 0
+
+Test Suites: 1 passed, 1 total
+Tests:       6 passed, 6 total
+Snapshots:   0 total
+Time:        0.392 s
+Ran all test suites matching /factorial.test.js/i.
