@@ -12,6 +12,7 @@ function factorialIterative(n) {
 console.log(factorialIterative(5)); // Output: 120
 
 
+
 function factorialRecursive(n) {
     if (n < 0) {
         return "Factorial is not defined for negative numbers";
