@@ -1,0 +1,92 @@
+
+Test Results:
+ 
+> testenv@1.0.0 test
+> jest factorial.test.js
+
+
+
+FAIL ./factorial.test.js
+  factorialIterative function
+    ✕ should calculate the factorial of a positive number correctly (3 ms)
+    ✕ should return an error message for negative numbers
+  factorialRecursive function
+    ✕ should calculate the factorial of a positive number correctly
+    ✕ should return an error message for negative numbers (1 ms)
+    ✕ should return 1 for 0 and 1 (1 ms)
+
+  ● factorialIterative function › should calculate the factorial of a positive number correctly
+
+    ReferenceError: factorialIterative is not defined
+
+      2 | describe('factorialIterative function', () => {
+      3 |   it('should calculate the factorial of a positive number correctly', () => {
+    > 4 |     expect(factorialIterative(5)).toBe(120);
+        |     ^
+      5 |   });
+      6 |
+      7 |   it('should return an error message for negative numbers', () => {
+
+      at Object.expect (factorial.test.js:4:5)
+
+  ● factorialIterative function › should return an error message for negative numbers
+
+    ReferenceError: factorialIterative is not defined
+
+       6 |
+       7 |   it('should return an error message for negative numbers', () => {
+    >  8 |     expect(factorialIterative(-5)).toBe('Factorial is not defined for negative numbers');
+         |     ^
+       9 |   });
+      10 | });
+      11 |
+
+      at Object.expect (factorial.test.js:8:5)
+
+  ● factorialRecursive function › should calculate the factorial of a positive number correctly
+
+    ReferenceError: factorialRecursive is not defined
+
+      12 | describe('factorialRecursive function', () => {
+      13 |   it('should calculate the factorial of a positive number correctly', () => {
+    > 14 |     expect(factorialRecursive(5)).toBe(120);
+         |     ^
+      15 |   });
+      16 |
+      17 |   it('should return an error message for negative numbers', () => {
+
+      at Object.expect (factorial.test.js:14:5)
+
+  ● factorialRecursive function › should return an error message for negative numbers
+
+    ReferenceError: factorialRecursive is not defined
+
+      16 |
+      17 |   it('should return an error message for negative numbers', () => {
+    > 18 |     expect(factorialRecursive(-5)).toBe('Factorial is not defined for negative numbers');
+         |     ^
+      19 |   });
+      20 |
+      21 |   it('should return 1 for 0 and 1', () => {
+
+      at Object.expect (factorial.test.js:18:5)
+
+  ● factorialRecursive function › should return 1 for 0 and 1
+
+    ReferenceError: factorialRecursive is not defined
+
+      20 |
+      21 |   it('should return 1 for 0 and 1', () => {
+    > 22 |     expect(factorialRecursive(0)).toBe(1);
+         |     ^
+      23 |     expect(factorialRecursive(1)).toBe(1);
+      24 |   });
+      25 | });
+
+      at Object.expect (factorial.test.js:22:5)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 5 total
+Snapshots:   0 total
+Time:        1.228 s
+Ran all test suites matching /factorial.test.js/i.
