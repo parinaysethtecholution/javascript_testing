@@ -1,10 +1,13 @@
 
-// Refactored code with improved readability and maintainability
-
-// Import the Product model
+// Import the required modules
 const Product = require('../models/Product');
 
-// Create a new product
+/**
+ * Create a new product
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 exports.createProduct = async (req, res) => {
   try {
     // Extract the necessary data from the request body
@@ -25,7 +28,12 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// Fetch all products
+/**
+ * Fetch all products
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 exports.getAllProducts = async (req, res) => {
   try {
     // Retrieve all products from the database
