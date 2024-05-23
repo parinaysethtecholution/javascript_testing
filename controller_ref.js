@@ -1,4 +1,5 @@
 
+
 // Refactored code with improved readability and maintainability
 
 // Import the Product model
