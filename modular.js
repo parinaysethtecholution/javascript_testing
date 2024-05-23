@@ -1,4 +1,7 @@
+
 //test
+// This function takes an object as an argument and returns an array of objects.
+// Each object in the array represents a chat, with properties for id, question, response, and timestamp.
 export function returnChats(obj) {
     let arr = [];
     Object.keys(obj).forEach(function(elem) {
