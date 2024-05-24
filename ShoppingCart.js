@@ -28,6 +28,10 @@ class ShoppingCart {
     this.discount = amount;
   }
 
+  applyTaxes(taxRate) {
+    this.taxes = taxRate;
+  }
+
   displayItems() {
     console.log('Shopping Cart Items:');
     this.items.forEach((item, index) => {
@@ -45,6 +49,10 @@ class ShoppingCart {
     return this.items.length;
   }
 
+  getTotalQuantity() {
+    return this.items.reduce((total, item) => total + item.quantity, 0);
+  }
+  
   getItemByName(name) {
     return this.items.find(item => item.name === name);
   }
@@ -53,6 +61,25 @@ class ShoppingCart {
     return this.items.some(item => item.name === name);
   }
 }
+
+updateItemQuantity(itemName, newQuantity) {
+    const item = this.getItemByName(itemName);
+    if (item) {
+      item.quantity = newQuantity;
+    } else {
+      console.error(`Item "${itemName}" not found in the cart.`);
+    }
+  }
+
+  removeItemByName(itemName) {
+    const itemIndex = this.items.findIndex((item) => item.name === itemName);
+    if (itemIndex !== -1) {
+      this.items.splice(itemIndex, 1);
+    } else {
+      console.error(`Item "${itemName}" not found in the cart.`);
+    }
+  }
+
 
 class Item {
   constructor(name, price) {
