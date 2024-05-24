@@ -26,8 +26,7 @@ function factorialRecursive(n) {
 console.log(factorialRecursive(5)); // Output: 120
 
 export function returnBogus(object) {
-    let arr = []; 
     for(let key in object) { 
-        console.log("This is Bogus"); 
+        console.log("This is Bogus"); // Logs "This is Bogus" for each key in the object
     }
 }
