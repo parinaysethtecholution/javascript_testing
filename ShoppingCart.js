@@ -1,91 +1,91 @@
+
 class ShoppingCart {
-  constructor() {
-    this.items = [];
-    this.discount = 0;
-  }
-
-  addItem(item) {
-    this.items.push(item);
-  }
-
-  removeItem(index) {
-    if (index >= 0 && index < this.items.length) {
-      this.items.splice(index, 1);
-    } else {
-      console.error('Invalid index');
+    constructor() {
+        this.items = [];
+        this.discount = 0;
     }
-  }
 
-  getTotalPrice() {
-    let totalPrice = 0;
-    for (const item of this.items) {
-      totalPrice += item.price;
+    addItem(item) {
+        this.items.push(item);
     }
-    return totalPrice - this.discount;
-  }
 
-  applyDiscount(amount) {
-    this.discount = amount;
-  }
+    removeItem(index) {
+        if (index >= 0 && index < this.items.length) {
+            this.items.splice(index, 1);
+        } else {
+            console.error('Invalid index');
+        }
+    }
 
-  applyTaxes(taxRate) {
-    this.taxes = taxRate;
-  }
+    getTotalPrice() {
+        let totalPrice = 0;
+        for (const item of this.items) {
+            totalPrice += item.price;
+        }
+        return totalPrice - this.discount;
+    }
 
-  displayItems() {
-    console.log('Shopping Cart Items:');
-    this.items.forEach((item, index) => {
-      console.log(`${index + 1}. ${item.name} - $${item.price}`);
-    });
-  }
+    applyDiscount(amount) {
+        this.discount = amount;
+    }
 
-  clearCart() {
-    this.items = [];
-    this.discount = 0;
-    console.log('Cart cleared.');
-  }
+    applyTaxes(taxRate) { // Method to apply taxes
+        this.taxes = taxRate;
+    }
 
-  getItemCount() {
-    return this.items.length;
-  }
+    displayItems() {
+        console.log('Shopping Cart Items:');
+        this.items.forEach((item, index) => {
+            console.log(`${index + 1}. ${item.name} - $$${item.price}`);
+        });
+    }
 
-  getTotalQuantity() {
-    return this.items.reduce((total, item) => total + item.quantity, 0);
-  }
-  
-  getItemByName(name) {
-    return this.items.find(item => item.name === name);
-  }
+    clearCart() {
+        this.items = [];
+        this.discount = 0;
+        console.log('Cart cleared.');
+    }
 
-  containsItem(name) {
-    return this.items.some(item => item.name === name);
-  }
+    getItemCount() {
+        return this.items.length;
+    }
+
+    getTotalQuantity() { // Method to get total quantity of items
+        return this.items.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    getItemByName(name) {
+        return this.items.find(item => item.name === name);
+    }
+
+    containsItem(name) {
+        return this.items.some(item => item.name === name);
+    }
+
+    updateItemQuantity(itemName, newQuantity) { // Method to update item quantity
+        const item = this.getItemByName(itemName);
+        if (item) {
+            item.quantity = newQuantity;
+        } else {
+            console.error(`Item "${itemName}" not found in the cart.`);
+        }
+    }
+
+    removeItemByName(itemName) { // Method to remove item by name
+        const itemIndex = this.items.findIndex((item) => item.name === itemName);
+        if (itemIndex !== -1) {
+            this.items.splice(itemIndex, 1);
+        } else {
+            console.error(`Item "${itemName}" not found in the cart.`);
+        }
+    }
 }
 
-updateItemQuantity(itemName, newQuantity) {
-    const item = this.getItemByName(itemName);
-    if (item) {
-      item.quantity = newQuantity;
-    } else {
-      console.error(`Item "${itemName}" not found in the cart.`);
-    }
-  }
-
-  removeItemByName(itemName) {
-    const itemIndex = this.items.findIndex((item) => item.name === itemName);
-    if (itemIndex !== -1) {
-      this.items.splice(itemIndex, 1);
-    } else {
-      console.error(`Item "${itemName}" not found in the cart.`);
-    }
-  }
-
-
 class Item {
-  constructor(name, price) {
-    this.name = name;
-    this.price = price;
-  }
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
+    }
 }
 
 // Example usage
@@ -122,5 +122,3 @@ console.log('Clearing cart...');
 cart.clearCart();
 cart.displayItems();
 console.log('Total Price:', cart.getTotalPrice());
-
-
