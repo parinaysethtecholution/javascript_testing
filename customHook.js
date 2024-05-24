@@ -36,4 +36,26 @@ const useFetchMovieTrailer = (movieId) => {
     }, [])
 }
 
+updateItemQuantity(itemName, newQuantity) {
+    const item = this.getItemByName(itemName);
+    if (item) {
+      item.quantity = newQuantity;
+    } else {
+      console.error(`Item "${itemName}" not found in the cart.`);
+    }
+  }
+
+  removeItemByName(itemName) {
+    const itemIndex = this.items.findIndex((item) => item.name === itemName);
+    if (itemIndex !== -1) {
+      this.items.splice(itemIndex, 1);
+    } else {
+      console.error(`Item "${itemName}" not found in the cart.`);
+    }
+  }
+}
+
+
 export default useFetchMovieTrailer;
+
+
