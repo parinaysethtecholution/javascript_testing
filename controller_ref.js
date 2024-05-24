@@ -1,3 +1,4 @@
+
 // Refactored code with improved readability and maintainability
 
 // Import the Product model
@@ -24,47 +25,34 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-
 exports.getAllProducts = async (req, res) => {
   try {
-   
-    const products = await Product.find();
-
-    
-    res.json(products);
+    // Fetch all products
+    const products = await Product.find(); // Fetch all products from the database
+    res.json(products); // Return the list of products
   } catch (error) {
-    
-    console.error('Error fetching products:', error);
+    console.error('Error fetching products:', error); // Log the error and return a server error response
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-
-
 exports.updateProduct = async (req, res) => {
   try {
-    
     const { productId } = req.params;
-
-    
     const { name, price, imageLink } = req.body;
-
-    
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
       { name, price, imageLink },
       { new: true }
     );
 
-    
     if (!updatedProduct) {
       return res.status(404).json({ error: 'Product not found' });
     }
-    
+
     res.json({ message: 'Product updated successfully', product: updatedProduct });
   } catch (error) {
-    // Log the error and return a server error response
-    console.error('Error updating product:', error);
+    console.error('Error updating product:', error); // Log the error and return a server error response
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
