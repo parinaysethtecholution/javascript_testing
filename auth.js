@@ -45,6 +45,20 @@ const login = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+const logout = async (req, res) => {
+  try {
+    // Clear the token from the client-side (e.g., remove from localStorage or cookies)
+    res.clearCookie('token');
+
+    // Optionally, you can also invalidate or blacklist the token on the server-side
+    // if you want to prevent further usage of the same token
+
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (error) {
+    console.error('Error in logout:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
   register,
