@@ -24,17 +24,47 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// Fetch all products
+
 exports.getAllProducts = async (req, res) => {
   try {
-    // Retrieve all products from the database
+   
     const products = await Product.find();
 
-    // Return the list of products
+    
     res.json(products);
   } catch (error) {
-    // Log the error and return a server error response
+    
     console.error('Error fetching products:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+exports.updateProduct = async (req, res) => {
+  try {
+    
+    const { productId } = req.params;
+
+    
+    const { name, price, imageLink } = req.body;
+
+    
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      { name, price, imageLink },
+      { new: true }
+    );
+
+    
+    if (!updatedProduct) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    
+    res.json({ message: 'Product updated successfully', product: updatedProduct });
+  } catch (error) {
+    // Log the error and return a server error response
+    console.error('Error updating product:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
