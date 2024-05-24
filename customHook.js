@@ -1,9 +1,9 @@
+
 const { useEffect } = require("react");
 const { useDispatch, useSelector } = require("react-redux");
 const { apiOptions, movieVideoUrl } = require("../Constants/apiConstants");
 const { setMovieTrailer } = require("../store/moviesSlice");
 const { isEmpty } = require("lodash");
-
 
 const useFetchMovieTrailer = (movieId) => {
     const dispatch = useDispatch();
@@ -36,26 +36,22 @@ const useFetchMovieTrailer = (movieId) => {
     }, [])
 }
 
-updateItemQuantity(itemName, newQuantity) {
+updateItemQuantity(itemName, newQuantity) { // Updates the quantity of a specific item
     const item = this.getItemByName(itemName);
     if (item) {
-      item.quantity = newQuantity;
+        item.quantity = newQuantity;
     } else {
-      console.error(`Item "${itemName}" not found in the cart.`);
+        console.error(`Item "${itemName}" not found in the cart.`);
     }
-  }
-
-  removeItemByName(itemName) {
-    const itemIndex = this.items.findIndex((item) => item.name === itemName);
-    if (itemIndex !== -1) {
-      this.items.splice(itemIndex, 1);
-    } else {
-      console.error(`Item "${itemName}" not found in the cart.`);
-    }
-  }
 }
 
+removeItemByName(itemName) { // Removes a specific item by its name
+    const itemIndex = this.items.findIndex((item) => item.name === itemName);
+    if (itemIndex !== -1) {
+        this.items.splice(itemIndex, 1);
+    } else {
+        console.error(`Item "${itemName}" not found in the cart.`);
+    }
+}
 
 export default useFetchMovieTrailer;
-
-
