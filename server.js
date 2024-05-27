@@ -1,53 +1,55 @@
-var express = require('express');
-var cors = require('cors');
-var axios = require('axios');
+
+const express = require('express');
+const cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
 
-var app = express();
+const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-var apiEndpoint = 'https://api.example.com/endpoint'; // Updated to include full URL
+const apiEndpoint = 'https://api.example.com/endpoint';
 
-app.post('/api', function(req, res) {
+// Function to handle API requests
+const handleApiRequest = async (req, res, url, headers) => {
   try {
-    var apiKey = process.env.API_KEY;
-    axios.post(apiEndpoint, req.body, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': apiKey
-      },
-    }).then(function(response) {
-      res.json(response.data);
-    }).catch(function(error) {
-      res.status(500).json({ error: 'Internal Server Error' });
-    });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.get('/api/news', function(req, res) {
-  try {
-    var newsApiKey = process.env.NEWS_API_KEY;
-    var q = req.query.q;
-    var from = req.query.from;
-    axios.get(`https://sample/api?q=${q}&from=${from}&sortBy=publishedAt&apiKey=${newsApiKey}`) // Corrected URL construction
-      .then(function(apiResponse) {
-        res.json(apiResponse.data);
-      })
-      .catch(function(error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      });
+    const response = await axios.post(url, req.body, { headers });
+    res.json(response.data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+};
+
+app.post('/api', (req, res) => {
+  const apiKey = process.env.API_KEY;
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': apiKey
+  };
+  handleApiRequest(req, res, apiEndpoint, headers);
 });
 
-var PORT = process.env.PORT || 4000;
-app.listen(PORT, function() {
-  console.log('Server is running on http://localhost:' + PORT);
+// Function to handle news requests
+const handleNewsRequest = async (req, res, url) => {
+  try {
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+app.get('/api/news', (req, res) => {
+  const newsApiKey = process.env.NEWS_API_KEY;
+  const { q, from } = req.query;
+  const url = `https://sample/api?q=${q}&from=${from}&sortBy=publishedAt&apiKey=${newsApiKey}`;
+  handleNewsRequest(req, res, url);
+});
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
