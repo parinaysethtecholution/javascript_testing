@@ -5,7 +5,8 @@ export function returnChats(obj) {
             "id": obj[elem].id,
             "question": obj[elem].question,
             "response": obj[elem].response,
-            "timeStamp": obj[elem].timeStamp
+            "timeStamp": obj[elem].timeStamp,
+            
         });
     });
     return arr;
