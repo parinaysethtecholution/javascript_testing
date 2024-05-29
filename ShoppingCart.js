@@ -1,13 +1,28 @@
+
+/**
+ * Class representing a shopping cart.
+ */
 class ShoppingCart {
+  /**
+   * Constructor to initialize the shopping cart.
+   */
   constructor() {
     this.items = [];
     this.discount = 0;
   }
 
+  /**
+   * Adds an item to the shopping cart.
+   * @param {Object} item - The item to be added.
+   */
   addItem(item) {
     this.items.push(item);
   }
 
+  /**
+   * Removes an item from the shopping cart based on the provided index.
+   * @param {number} index - The index of the item to be removed.
+   */
   removeItem(index) {
     if (index >= 0 && index < this.items.length) {
       this.items.splice(index, 1);
@@ -16,18 +31,26 @@ class ShoppingCart {
     }
   }
 
+  /**
+   * Calculates and returns the total price of all items in the shopping cart after applying the discount.
+   * @returns {number} The total price after applying the discount.
+   */
   getTotalPrice() {
-    let totalPrice = 0;
-    for (const item of this.items) {
-      totalPrice += item.price;
-    }
+    const totalPrice = this.items.reduce((sum, item) => sum + item.price, 0);
     return totalPrice - this.discount;
   }
 
+  /**
+   * Applies a discount to the shopping cart.
+   * @param {number} amount - The discount amount.
+   */
   applyDiscount(amount) {
     this.discount = amount;
   }
 
+  /**
+   * Displays all items in the shopping cart with their respective index and price.
+   */
   displayItems() {
     console.log('Shopping Cart Items:');
     this.items.forEach((item, index) => {
@@ -35,26 +58,51 @@ class ShoppingCart {
     });
   }
 
+  /**
+   * Clears the shopping cart by removing all items and resetting the discount.
+   */
   clearCart() {
     this.items = [];
     this.discount = 0;
     console.log('Cart cleared.');
   }
 
+  /**
+   * Returns the number of items in the shopping cart.
+   * @returns {number} The number of items in the shopping cart.
+   */
   getItemCount() {
     return this.items.length;
   }
 
+  /**
+   * Retrieves an item from the shopping cart based on its name.
+   * @param {string} name - The name of the item to retrieve.
+   * @returns {Object|undefined} The item object if found, or undefined if not found.
+   */
   getItemByName(name) {
     return this.items.find(item => item.name === name);
   }
 
+  /**
+   * Checks if an item with the given name exists in the shopping cart.
+   * @param {string} name - The name of the item to check.
+   * @returns {boolean} True if the item exists in the cart, false otherwise.
+   */
   containsItem(name) {
     return this.items.some(item => item.name === name);
   }
 }
 
+/**
+ * Class representing an item.
+ */
 class Item {
+  /**
+   * Constructor to initialize an item.
+   * @param {string} name - The name of the item.
+   * @param {number} price - The price of the item.
+   */
   constructor(name, price) {
     this.name = name;
     this.price = price;
@@ -98,38 +146,39 @@ console.log('Total Price:', cart.getTotalPrice());
 
 // Example array of cart items
 const cartItems = [
-    { name: "Item 1", price: 29.99, quantity: 1 },
-    { name: "Item 2", price: 49.99, quantity: 2 },
-    { name: "Item 3", price: 9.99, quantity: 5 }
+  { name: "Item 1", price: 29.99, quantity: 1 },
+  { name: "Item 2", price: 49.99, quantity: 2 },
+  { name: "Item 3", price: 9.99, quantity: 5 }
 ];
 
-// Function to calculate the total value of the cart
+/**
+ * Calculates the total value of the cart items.
+ * @param {Array} cartItems - An array of cart items.
+ * @returns {string} The total value of the cart items as a string with 2 decimal places.
+ */
 function calculateTotal(cartItems) {
-    let totalValue = 0;
-
-    cartItems.forEach(item => {
-        totalValue += item.price * item.quantity;
-    });
-
-    return totalValue.toFixed(2); // Returns the total value as a string with 2 decimal places
+  const totalValue = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return totalValue.toFixed(2);
 }
 
-// Function to display the cart items and total value
+/**
+ * Displays the cart items and total value on the page.
+ * @param {Array} cartItems - An array of cart items.
+ */
 function displayCart(cartItems) {
-    const cartItemsDiv = document.getElementById("cart-items");
-    const totalValueSpan = document.getElementById("total-value");
+  const cartItemsDiv = document.getElementById("cart-items");
+  const totalValueSpan = document.getElementById("total-value");
 
-    cartItemsDiv.innerHTML = "";
-    cartItems.forEach(item => {
-        const itemDiv = document.createElement("div");
-        itemDiv.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
-        cartItemsDiv.appendChild(itemDiv);
-    });
+  cartItemsDiv.innerHTML = "";
+  cartItems.forEach(item => {
+    const itemDiv = document.createElement("div");
+    itemDiv.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+    cartItemsDiv.appendChild(itemDiv);
+  });
 
-    const totalValue = calculateTotal(cartItems);
-    totalValueSpan.textContent = totalValue;
+  const totalValue = calculateTotal(cartItems);
+  totalValueSpan.textContent = totalValue;
 }
 
 // Initialize the cart display
 displayCart(cartItems);
-
