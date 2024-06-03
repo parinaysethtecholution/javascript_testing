@@ -4,10 +4,6 @@ class ShoppingCart {
     this.discount = 0;
   }
 
-  addItem(item) {
-    this.items.push(item);
-  }
-
   removeItem(index) {
     if (index >= 0 && index < this.items.length) {
       this.items.splice(index, 1);
