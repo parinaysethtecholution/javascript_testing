@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require('express'); 
 var cors = require('cors');
 var axios = require('axios');
 require('dotenv').config();
@@ -27,6 +27,7 @@ app.post('/api', function(req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 app.get('/api/news', function(req, res) {
   try {
