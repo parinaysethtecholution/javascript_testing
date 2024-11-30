@@ -24,3 +24,51 @@ function factorialRecursive(n) {
 }
 
 console.log(factorialRecursive(5)); // Output: 120
+
+class ParkingLot {
+  constructor(numSlots) {
+    this.slots = new Array(numSlots).fill(null); // Array to store car IDs (null for empty)
+  }
+
+  park(carId) {
+    if (this.isFull()) {
+      return "Parking lot is full!";
+    }
+    for (let i = 0; i < this.slots.length; i++) {
+      if (this.slots[i] === null) {
+        this.slots[i] = carId;
+        return `Car ${carId} parked in slot ${i + 1}`;
+      }
+    }
+  }
+
+  leave(carId) {
+    const slotIndex = this.findCarSlot(carId);
+    if (slotIndex === -1) {
+      return "Car not found in parking lot";
+    }
+    this.slots[slotIndex] = null;
+    return `Car ${carId} left from slot ${slotIndex + 1}`;
+  }
+
+  isFull() {
+    return this.slots.every(slot => slot !== null);
+  }
+
+  findCarSlot(carId) {
+    return this.slots.indexOf(carId);
+  }
+}
+
+// Example usage
+const parkingLot = new ParkingLot(5); // Create parking lot with 5 slots
+console.log(parkingLot.park("CAR123")); // Park car CAR123
+console.log(parkingLot.park("TRUCK789")); // Park car TRUCK789
+console.log(parkingLot.park("BIKE456")); // Park car BIKE456
+console.log(parkingLot.park("SCOOTER001")); // Park car SCOOTER001 (should be full)
+
+console.log(parkingLot.leave("CAR123")); // Remove car CAR123
+console.log(parkingLot.park("MOTORCYCLE999")); // Park car MOTORCYCLE999 (should take the free slot)
+
+console.log(parkingLot.slots); // Output: ["CAR123", "TRUCK789", "BIKE456", null, "MOTORCYCLE999"]
+
