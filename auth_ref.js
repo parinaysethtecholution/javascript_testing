@@ -6,12 +6,7 @@ const bcrypt = require('bcrypt');
 
 const JWT_SECRET = process.env.SECRET_KEY;
 
-/**
- * Register a new user
- * @param {Object} req - The request object
- * @param {Object} res - The response object
- * @returns {Promise<void>}
- */
+
 const register = async (req, res) => {
     try {
         const { email, phone, name, address, password, role } = req.body;
