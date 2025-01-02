@@ -10,7 +10,6 @@ function factorialIterative(n) {
     return result;
 }
 
-console.log(factorialIterative(5)); // Output: 120
 
 
 function factorialRecursive(n) {
