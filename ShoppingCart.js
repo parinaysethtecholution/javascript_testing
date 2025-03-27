@@ -1,3 +1,4 @@
+// Triggering unit test run locally
 class ShoppingCart {
   constructor() {
     this.items = [];
