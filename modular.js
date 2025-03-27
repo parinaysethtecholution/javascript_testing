@@ -41,3 +41,9 @@ export function returnWeatherDetails(object) {
     }
     return arr;
 }
+
+export function returnBogus(object){
+    let arr=[];
+    for(let key in object){
+        console.log("This is Bogus");
+    }
