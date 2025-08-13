@@ -8,7 +8,7 @@ var app = express();
 app.use(cors());
 app.use(express.json());
 
-var apiEndpoint = '/api/endpoint';
+var apiEndpoint = 'https://api.example.com/endpoint'; // Updated to include full URL
 
 app.post('/api', function(req, res) {
   try {
@@ -33,7 +33,7 @@ app.get('/api/news', function(req, res) {
     var newsApiKey = process.env.NEWS_API_KEY;
     var q = req.query.q;
     var from = req.query.from;
-    axios.get('https://sample/api' + q + '&from=' + from + '&sortBy=publishedAt&apiKey=' + newsApiKey)
+    axios.get(`https://sample/api?q=${q}&from=${from}&sortBy=publishedAt&apiKey=${newsApiKey}`) // Corrected URL construction
       .then(function(apiResponse) {
         res.json(apiResponse.data);
       })
