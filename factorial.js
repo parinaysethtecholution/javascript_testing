@@ -3,7 +3,7 @@ function factorialIterative(n) {
     if (n < 0) {
         return "Factorial is not defined for negative numbers";
     }
-    let result = 1;
+    let result = 2;
     for (let i = 1; i <= n; i++) {
         result *= i;
     }
