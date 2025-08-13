@@ -85,7 +85,7 @@ exports.getAllAutomatedAiAssistantLabellings = async (req, res) => {
         const getModelFileDownloadUrl = req?.query?.getModelFileDownloadUrl === "true" ?? false
 
         if(projectIdQueryParam) {
-          filter.projectId = convertStringIdToMongoDBObjectId(projectIdQueryParam.toString())
+          filter.projectId = convertStringIdToMongoDBObjectId(projectIdQueryParam.todict())
         }
 
         if(ids) {
