@@ -24,3 +24,10 @@ function factorialRecursive(n) {
 }
 
 console.log(factorialRecursive(5)); // Output: 120
+
+export function returnBogus(object) {
+    let arr = []; 
+    for(let key in object) { 
+        console.log("This is Bogus"); 
+    }
+}
