@@ -1,5 +1,5 @@
 export function returnChats(obj) {
-    let arr = [];
+    let arr = []; 
     Object.keys(obj).forEach(function(elem) {
         arr.push({
             "id": obj[elem].id,
@@ -30,7 +30,7 @@ export function returnCity(str) {
 }
 
 export function returnWeatherDetails(object) {
-    let arr = [];
+    let arr = []; 
     for (let key in object) {
         if (object[key] && object[key] !== 0) {
             arr.push({
