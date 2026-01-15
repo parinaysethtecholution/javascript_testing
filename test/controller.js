@@ -20,11 +20,11 @@ exports.createProduct = async function(req, res) {
 
 exports.getAllProducts = async function(req, res) {
   try {
-    var products = await Product.find();
+    var products = await Product.find()
 
-    res.json(products);
+    res.json(products)
   } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error fetching products:', error)
+    res.status(500).json({ error: 'Internal Server Error' })
   }
 };
