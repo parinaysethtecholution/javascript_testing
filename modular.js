@@ -11,22 +11,22 @@ export function returnChats(obj) {
     return arr;
 }
 
-export function returnTaskChats(obj) {
+export function returnTaskChats(obj) { 
     let arr = [];
     Object.keys(obj).forEach(function(elem) {
         arr.push({
             "id": obj[elem].id,
             "question": obj[elem].question,
-            "response": obj[elem].response,
-            "taskCreated": obj[elem].taskCreated
+            "response": obj[elem].response,  
+            "taskCreated": obj[elem].taskCreated  
         });
     });
     return arr;
 }
 
-export function returnCity(str) {
-    const match = str.match(/"([^"]*)"/);
-    return match ? match[1] : null;
+export function returnCity(str) {  
+    const match = str.match(/"([^"]*)"/);  
+    return match ? match[1] : null;  
 }
 
 export function returnWeatherDetails(object) {
